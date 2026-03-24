@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cunahuo8vkjwf"]
+
+[ext_resource type="Texture2D" uid="uid://ba5d7ciyt5b1v" path="res://Assets/Towers/Combat Towers Projectiles/spr_tower_crossbow_projectile.png" id="1_kb02j"]
+[ext_resource type="Script" path="res://Assets/Scripts/Projectile.gd" id="2_proj"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3t576"]
+radius = 3.0
+height = 14.0
+
+[node name="CrossbowArrow" type="Node2D" unique_id=774111706]
+script = ExtResource("2_proj")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=698251857]
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=1428816067]
+texture_filter = 1
+texture = ExtResource("1_kb02j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=814318901]
+shape = SubResource("CapsuleShape2D_3t576")

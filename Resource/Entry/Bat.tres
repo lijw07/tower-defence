@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WaveEntry" format=3 uid="uid://d16qkw6r3tiry"]
+
+[ext_resource type="Resource" uid="uid://2jtgl1sgayf2" path="res://Resource/Enemy/Bat.tres" id="1_prsxd"]
+[ext_resource type="Script" uid="uid://bntii5awebcpn" path="res://Assets/Scripts/WaveEntry.gd" id="1_v2p0j"]
+
+[resource]
+script = ExtResource("1_v2p0j")
+enemy_data = ExtResource("1_prsxd")
+count = 10
+spawn_interval = 3.0
+metadata/_custom_type_script = "uid://bntii5awebcpn"

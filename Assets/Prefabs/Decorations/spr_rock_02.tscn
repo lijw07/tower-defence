@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dh8ok5g3hmtfd"]
+
+[ext_resource type="Texture2D" uid="uid://dw6ajju72cy3t" path="res://Assets/Environment/Decoration/spr_rock_02.png" id="1_8vmar"]
+
+[node name="SprRock02" type="Sprite2D" unique_id=967269473]
+texture_filter = 1
+texture = ExtResource("1_8vmar")

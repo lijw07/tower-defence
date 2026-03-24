@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dccfumuwwk4yh"]
+
+[ext_resource type="Texture2D" uid="uid://b8ngytqdg13nr" path="res://Assets/Towers/Combat Towers Projectiles/spr_tower_poison_wizard_projectile.png" id="1_2maa5"]
+[ext_resource type="Script" path="res://Assets/Scripts/Projectile.gd" id="2_proj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tsse2"]
+radius = 2.0
+
+[node name="Posion" type="Node2D" unique_id=614177729]
+script = ExtResource("2_proj")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=353838560]
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=1572394193]
+texture_filter = 1
+texture = ExtResource("1_2maa5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=295775738]
+shape = SubResource("CircleShape2D_tsse2")

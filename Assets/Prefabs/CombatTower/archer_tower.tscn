@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b8uht6ofalgkm"]
+
+[ext_resource type="Texture2D" uid="uid://ko7f4ixfrse" path="res://Assets/Towers/Combat Towers/spr_tower_archer.png" id="1_o53ka"]
+[ext_resource type="Script" path="res://Assets/Scripts/Tower.gd" id="2_tower"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t76n7"]
+radius = 60.0
+
+[node name="ArcherTower" type="Node2D" unique_id=61857695]
+script = ExtResource("2_tower")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=645570293]
+
+[node name="SprTowerArcher" type="Sprite2D" parent="Area2D" unique_id=1067355070]
+texture_filter = 1
+texture = ExtResource("1_o53ka")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=700653715]
+shape = SubResource("CircleShape2D_t76n7")

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WaveData" format=3 uid="uid://ihqdnprls7mk"]
+
+[ext_resource type="Script" uid="uid://bk23rqe7v7tpj" path="res://Assets/Scripts/WaveData.gd" id="1_script"]
+[ext_resource type="Resource" uid="uid://bfcvf2a1ae5k1" path="res://Resource/Entry/SlimeEntry.tres" id="2_slime"]
+
+[resource]
+script = ExtResource("1_script")
+wave_number = 1
+entries = [ExtResource("2_slime")]
+metadata/_custom_type_script = "uid://bk23rqe7v7tpj"

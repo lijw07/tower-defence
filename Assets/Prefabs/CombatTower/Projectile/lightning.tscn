@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ho6j885mkik0"]
+
+[ext_resource type="Texture2D" uid="uid://bff5atjnyeo2g" path="res://Assets/Towers/Combat Towers Projectiles/spr_tower_lightning_tower_projectile.png" id="1_13ft5"]
+[ext_resource type="Script" path="res://Assets/Scripts/Projectile.gd" id="2_proj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g1f4v"]
+size = Vector2(2, 4)
+
+[node name="Lightning" type="Node2D" unique_id=2013072049]
+script = ExtResource("2_proj")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2095421714]
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=567183352]
+texture_filter = 1
+texture = ExtResource("1_13ft5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=979957642]
+shape = SubResource("RectangleShape2D_g1f4v")

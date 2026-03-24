@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bqajkfxdr22qd"]
+
+[ext_resource type="Texture2D" uid="uid://cdcpmlmwmhlae" path="res://Assets/Towers/Combat Towers/spr_tower_ice_wizard.png" id="1_v4wnr"]
+[ext_resource type="Script" path="res://Assets/Scripts/Tower.gd" id="2_tower"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wsrbu"]
+radius = 50.0
+
+[node name="IceWizardTower" type="Node2D" unique_id=455779450]
+script = ExtResource("2_tower")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1488933969]
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1574599600]
+texture_filter = 1
+texture = ExtResource("1_v4wnr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1828887862]
+shape = SubResource("CircleShape2D_wsrbu")

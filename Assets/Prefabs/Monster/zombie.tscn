@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://eqwat8ch5if0"]
+
+[ext_resource type="Texture2D" uid="uid://qap40yylkat5" path="res://Assets/Enemies/spr_zombie.png" id="1_hrauc"]
+[ext_resource type="Script" uid="uid://dqvycu153j8q7" path="res://Assets/Scripts/enemy.gd" id="1_x221i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x221i"]
+atlas = ExtResource("1_hrauc")
+region = Rect2(0, 0, 8, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ub8ds"]
+atlas = ExtResource("1_hrauc")
+region = Rect2(8, 0, 8, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4i7uk"]
+atlas = ExtResource("1_hrauc")
+region = Rect2(16, 0, 8, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdw83"]
+atlas = ExtResource("1_hrauc")
+region = Rect2(24, 0, 8, 7)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3yd0g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x221i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ub8ds")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4i7uk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tdw83")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7xsuh"]
+size = Vector2(6, 6)
+
+[node name="Area2D" type="Area2D" unique_id=1220077165]
+script = ExtResource("1_x221i")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1335801531]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_3yd0g")
+frame_progress = 0.7431865
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1161174840]
+shape = SubResource("RectangleShape2D_7xsuh")

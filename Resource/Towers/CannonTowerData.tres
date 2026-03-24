@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://Assets/Scripts/TowerData.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://ind2hl3jqokb" path="res://Assets/Prefabs/CombatTower/cannon_tower.tscn" id="2_scene"]
+[ext_resource type="PackedScene" uid="uid://bho3ce3nkoofj" path="res://Assets/Prefabs/CombatTower/Projectile/cannon_ball.tscn" id="3_proj"]
+[ext_resource type="Texture2D" uid="uid://da0d870mvw64y" path="res://Assets/Towers/Combat Towers/spr_tower_cannon.png" id="4_icon"]
+
+[resource]
+script = ExtResource("1_script")
+tower_name = "Cannon"
+scene = ExtResource("2_scene")
+projectile_scene = ExtResource("3_proj")
+cost = 100
+damage = 60.0
+attack_speed = 1.0
+icon = ExtResource("4_icon")

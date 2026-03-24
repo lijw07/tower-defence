@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://dg6fqlh1pijm6"]
+
+[ext_resource type="Texture2D" uid="uid://cv5lo2wjho0bk" path="res://Assets/Towers/Castle/spr_castle_red.png" id="1_jfjt5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jsik6"]
+atlas = ExtResource("1_jfjt5")
+region = Rect2(0, 0, 52, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jgqbs"]
+atlas = ExtResource("1_jfjt5")
+region = Rect2(52, 0, 52, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sebdi"]
+atlas = ExtResource("1_jfjt5")
+region = Rect2(104, 0, 52, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ubfvl"]
+atlas = ExtResource("1_jfjt5")
+region = Rect2(156, 0, 52, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xn0h2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jsik6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jgqbs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sebdi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ubfvl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdltr"]
+size = Vector2(52, 38)
+
+[node name="CastleRed" type="Node2D" unique_id=170853753]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=300008762]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StaticBody2D" unique_id=450637404]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_xn0h2")
+frame_progress = 0.8174139
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1754674409]
+shape = SubResource("RectangleShape2D_kdltr")

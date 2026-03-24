@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WaveEntry" format=3 uid="uid://bfcvf2a1ae5k1"]
+
+[ext_resource type="Resource" uid="uid://cbcciw3aaxnbh" path="res://Resource/Enemy/Slime.tres" id="1_an4se"]
+[ext_resource type="Script" uid="uid://bntii5awebcpn" path="res://Assets/Scripts/WaveEntry.gd" id="2_fedjj"]
+
+[resource]
+script = ExtResource("2_fedjj")
+enemy_data = ExtResource("1_an4se")
+count = 10
+spawn_interval = 1.5
+metadata/_custom_type_script = "uid://bntii5awebcpn"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WaveEntry" format=3]
+
+[ext_resource type="Script" uid="uid://bntii5awebcpn" path="res://Assets/Scripts/WaveEntry.gd" id="1_script"]
+[ext_resource type="Resource" uid="uid://vpu5llrljah2" path="res://Resource/Enemy/Skeleton.tres" id="2_enemy"]
+
+[resource]
+script = ExtResource("1_script")
+enemy_data = ExtResource("2_enemy")
+count = 10
+spawn_interval = 1.2
+metadata/_custom_type_script = "uid://bntii5awebcpn"

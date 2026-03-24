@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ind2hl3jqokb"]
+
+[ext_resource type="Texture2D" uid="uid://da0d870mvw64y" path="res://Assets/Towers/Combat Towers/spr_tower_cannon.png" id="1_tgvwk"]
+[ext_resource type="Script" path="res://Assets/Scripts/Tower.gd" id="2_tower"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s1akc"]
+radius = 90.0
+
+[node name="CannonTower" type="Node2D" unique_id=874431419]
+script = ExtResource("2_tower")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=261726134]
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=371171350]
+texture_filter = 1
+texture = ExtResource("1_tgvwk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=185303974]
+shape = SubResource("CircleShape2D_s1akc")

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://btybfss4bxsvc"]
+
+[ext_resource type="Texture2D" uid="uid://mmvoyulpoi3a" path="res://Assets/Environment/Decoration/spr_mushroom_02.png" id="1_rpxh2"]
+
+[node name="SprMushroom02" type="Sprite2D" unique_id=1925276837]
+texture_filter = 1
+texture = ExtResource("1_rpxh2")

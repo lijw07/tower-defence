@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://cbcciw3aaxnbh"]
+
+[ext_resource type="PackedScene" uid="uid://cdko3q78jgu4k" path="res://Assets/Prefabs/Monster/slime.tscn" id="1_02e37"]
+[ext_resource type="Script" uid="uid://daiuak44pcfwq" path="res://Assets/Scripts/EnemyData.gd" id="1_sc5vv"]
+
+[resource]
+script = ExtResource("1_sc5vv")
+enemy_name = "Slime"
+scene = ExtResource("1_02e37")
+health = 80.0
+metadata/_custom_type_script = "uid://daiuak44pcfwq"

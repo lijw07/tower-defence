@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://ca5qngr51gfs4"]
+
+[ext_resource type="Script" uid="uid://w143sgp1t2x6" path="res://Assets/Prefabs/Castle/Castle.gd" id="1_fbodb"]
+[ext_resource type="Texture2D" uid="uid://bwndgbjqy3b58" path="res://Assets/Towers/Castle/spr_castle_blue.png" id="1_rsj2i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cki5e"]
+atlas = ExtResource("1_rsj2i")
+region = Rect2(0, 0, 52, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bu5xc"]
+atlas = ExtResource("1_rsj2i")
+region = Rect2(52, 0, 52, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4v8oc"]
+atlas = ExtResource("1_rsj2i")
+region = Rect2(104, 0, 52, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lye1e"]
+atlas = ExtResource("1_rsj2i")
+region = Rect2(156, 0, 52, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kcja2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cki5e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bu5xc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4v8oc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lye1e")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kon25"]
+size = Vector2(52, 38)
+
+[node name="Area2D" type="Area2D" unique_id=227214491]
+script = ExtResource("1_fbodb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=980502535]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_kcja2")
+frame_progress = 0.7938745
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=505497674]
+shape = SubResource("RectangleShape2D_kon25")

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://fijewbsd2ue7"]
+
+[ext_resource type="Texture2D" uid="uid://dakwu4fwyp3ee" path="res://Assets/Environment/Decoration/spr_tree_01_cherry_blossom.png" id="1_epsuy"]
+
+[node name="SprTree01CherryBlossom" type="Sprite2D" unique_id=667901295]
+texture_filter = 1
+texture = ExtResource("1_epsuy")

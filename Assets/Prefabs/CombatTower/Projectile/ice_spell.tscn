@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b3ta1043mh1fy"]
+
+[ext_resource type="Texture2D" uid="uid://4edqcg2hmknq" path="res://Assets/Towers/Combat Towers Projectiles/spr_tower_ice_wizard_projectile.png" id="1_pklsl"]
+[ext_resource type="Script" path="res://Assets/Scripts/Projectile.gd" id="2_proj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_18nwr"]
+radius = 2.0
+
+[node name="IceSpell" type="Node2D" unique_id=1316309175]
+script = ExtResource("2_proj")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1680272635]
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=254585809]
+texture_filter = 1
+texture = ExtResource("1_pklsl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1566172018]
+shape = SubResource("CircleShape2D_18nwr")

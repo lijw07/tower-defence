@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WaveEntry" format=3 uid="uid://b2ki6hsyh4gq3"]
+
+[ext_resource type="Resource" uid="uid://dob02uknn0il0" path="res://Resource/Enemy/BigSlime.tres" id="1_78ejl"]
+[ext_resource type="Script" uid="uid://bntii5awebcpn" path="res://Assets/Scripts/WaveEntry.gd" id="1_u750c"]
+
+[resource]
+script = ExtResource("1_u750c")
+enemy_data = ExtResource("1_78ejl")
+count = 8
+spawn_interval = 2.0
+metadata/_custom_type_script = "uid://bntii5awebcpn"

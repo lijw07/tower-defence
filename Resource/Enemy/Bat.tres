@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://2jtgl1sgayf2"]
+
+[ext_resource type="PackedScene" uid="uid://bf52p7n4xslmg" path="res://Assets/Prefabs/Monster/bat.tscn" id="1_wnv78"]
+[ext_resource type="Script" uid="uid://daiuak44pcfwq" path="res://Assets/Scripts/EnemyData.gd" id="2_y5wew"]
+
+[resource]
+script = ExtResource("2_y5wew")
+enemy_name = "Bat"
+scene = ExtResource("1_wnv78")
+metadata/_custom_type_script = "uid://daiuak44pcfwq"

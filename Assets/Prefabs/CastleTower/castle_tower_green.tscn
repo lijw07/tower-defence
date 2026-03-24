@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://bxi2fducpqcyv"]
+
+[ext_resource type="Texture2D" uid="uid://kk1cnhcchbmn" path="res://Assets/Towers/Non-Combat Towers/spr_normal_tower_01_green.png" id="1_bortr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u0nct"]
+atlas = ExtResource("1_bortr")
+region = Rect2(0, 0, 22, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x15mf"]
+atlas = ExtResource("1_bortr")
+region = Rect2(22, 0, 22, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d7pic"]
+atlas = ExtResource("1_bortr")
+region = Rect2(44, 0, 22, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gidiu"]
+atlas = ExtResource("1_bortr")
+region = Rect2(66, 0, 22, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_580fm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u0nct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x15mf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d7pic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gidiu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="CastleTowerBlue" type="Node2D" unique_id=1649473510]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=230781711]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_580fm")
+frame_progress = 0.20943156

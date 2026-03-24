@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://Assets/Scripts/TowerData.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://c4df6vm7niqpk" path="res://Assets/Prefabs/CombatTower/posion_tower.tscn" id="2_scene"]
+[ext_resource type="PackedScene" uid="uid://dccfumuwwk4yh" path="res://Assets/Prefabs/CombatTower/Projectile/posion.tscn" id="3_proj"]
+[ext_resource type="Texture2D" uid="uid://r2nbbb7gitvl" path="res://Assets/Towers/Combat Towers/spr_tower_poison_wizard.png" id="4_icon"]
+
+[resource]
+script = ExtResource("1_script")
+tower_name = "Poison"
+scene = ExtResource("2_scene")
+projectile_scene = ExtResource("3_proj")
+cost = 70
+damage = 15.0
+attack_speed = 0.5
+icon = ExtResource("4_icon")

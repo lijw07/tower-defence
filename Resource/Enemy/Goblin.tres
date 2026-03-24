@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://bcjrvyudbh5e6"]
+
+[ext_resource type="Script" uid="uid://daiuak44pcfwq" path="res://Assets/Scripts/EnemyData.gd" id="1_mo7rs"]
+[ext_resource type="PackedScene" uid="uid://cd7d3r6gfjlt4" path="res://Assets/Prefabs/Monster/goblin.tscn" id="1_xleva"]
+
+[resource]
+script = ExtResource("1_mo7rs")
+enemy_name = "Goblin"
+scene = ExtResource("1_xleva")
+health = 100.0
+reward = 20
+metadata/_custom_type_script = "uid://daiuak44pcfwq"

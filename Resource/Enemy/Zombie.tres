@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://lmq6ncl1x44s"]
+
+[ext_resource type="PackedScene" uid="uid://eqwat8ch5if0" path="res://Assets/Prefabs/Monster/zombie.tscn" id="1_i5xjy"]
+[ext_resource type="Script" uid="uid://daiuak44pcfwq" path="res://Assets/Scripts/EnemyData.gd" id="1_so18u"]
+
+[resource]
+script = ExtResource("1_so18u")
+enemy_name = "Zombie"
+scene = ExtResource("1_i5xjy")
+health = 100.0
+metadata/_custom_type_script = "uid://daiuak44pcfwq"

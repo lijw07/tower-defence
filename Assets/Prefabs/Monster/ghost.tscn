@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://dc0l6qr8ra4qq"]
+
+[ext_resource type="Script" uid="uid://dqvycu153j8q7" path="res://Assets/Scripts/enemy.gd" id="1_g7y54"]
+[ext_resource type="Texture2D" uid="uid://b23v1tuqoprbp" path="res://Assets/Enemies/spr_ghost.png" id="1_prblf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g7y54"]
+atlas = ExtResource("1_prblf")
+region = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lkjlv"]
+atlas = ExtResource("1_prblf")
+region = Rect2(10, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sxdtg"]
+atlas = ExtResource("1_prblf")
+region = Rect2(20, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u3vmg"]
+atlas = ExtResource("1_prblf")
+region = Rect2(30, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfkrx"]
+atlas = ExtResource("1_prblf")
+region = Rect2(40, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_03w8p"]
+atlas = ExtResource("1_prblf")
+region = Rect2(50, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ayomj"]
+atlas = ExtResource("1_prblf")
+region = Rect2(60, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d5131"]
+atlas = ExtResource("1_prblf")
+region = Rect2(70, 0, 10, 10)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_623dm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g7y54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lkjlv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sxdtg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u3vmg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfkrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_03w8p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ayomj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d5131")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uakm3"]
+size = Vector2(8, 9)
+
+[node name="Area2D" type="Area2D" unique_id=1600358823]
+script = ExtResource("1_g7y54")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1255409249]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_623dm")
+frame_progress = 0.05184603
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=466426596]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_uakm3")

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WaveData" format=3 uid="uid://w86myk6vubni"]
+
+[ext_resource type="Script" uid="uid://bk23rqe7v7tpj" path="res://Assets/Scripts/WaveData.gd" id="1_script"]
+[ext_resource type="Resource" uid="uid://bfcvf2a1ae5k1" path="res://Resource/Entry/SlimeEntry.tres" id="2_slime"]
+[ext_resource type="Resource" uid="uid://d16qkw6r3tiry" path="res://Resource/Entry/Bat.tres" id="3_bat"]
+
+[resource]
+script = ExtResource("1_script")
+wave_number = 2
+entries = [ExtResource("2_slime"), ExtResource("3_bat")]
+time_between_batches = 2.0
+metadata/_custom_type_script = "uid://bk23rqe7v7tpj"

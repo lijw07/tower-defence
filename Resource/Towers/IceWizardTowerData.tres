@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" path="res://Assets/Scripts/TowerData.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bqajkfxdr22qd" path="res://Assets/Prefabs/CombatTower/ice_wizard_tower.tscn" id="2_scene"]
+[ext_resource type="PackedScene" uid="uid://b3ta1043mh1fy" path="res://Assets/Prefabs/CombatTower/Projectile/ice_spell.tscn" id="3_proj"]
+[ext_resource type="Texture2D" uid="uid://cdcpmlmwmhlae" path="res://Assets/Towers/Combat Towers/spr_tower_ice_wizard.png" id="4_icon"]
+
+[resource]
+script = ExtResource("1_script")
+tower_name = "Ice Wizard"
+scene = ExtResource("2_scene")
+projectile_scene = ExtResource("3_proj")
+cost = 80
+damage = 20.0
+attack_speed = 0.7
+icon = ExtResource("4_icon")

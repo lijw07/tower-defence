@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://offvcdddwuxu"]
+
+[ext_resource type="Texture2D" uid="uid://cpvw5eq7ivl0m" path="res://Assets/Environment/Decoration/spr_tree_01_autumn.png" id="1_m6855"]
+
+[node name="SprTree01Autumn" type="Sprite2D" unique_id=435341424]
+texture_filter = 1
+texture = ExtResource("1_m6855")
