@@ -23,6 +23,10 @@ const MUSIC_MAX_DB: float = -18.0    # music cap — 100% slider = this dB level
 var _music_volume_db: float = -18.0   # music plays quieter so SFX stay audible
 var _sfx_volume_db: float = 0.0
 
+# Web audio unlock — browsers suspend AudioContext until first user interaction
+var _audio_unlocked: bool = false
+var _pending_music: String = ""
+
 
 func _ready() -> void:
 	# Ensure audio keeps playing even when the scene tree is paused
@@ -124,12 +128,13 @@ func get_music_volume_linear() -> float:
 
 
 ## Start looping background music. Pass "menu" or "gameplay".
-func play_music(track_name: String, volume_db: float = 0.0) -> void:
+func play_music(track_name: String, _volume_db: float = 0.0) -> void:
 	var key: String = "music_" + track_name
 	if not _sounds.has(key):
 		return
 	if _current_music == track_name and _music_player.playing:
 		return  # already playing this track
+	_pending_music = track_name
 	_music_player.stream = _sounds[key]
 	_music_player.volume_db = _music_volume_db
 	_music_player.play()
@@ -143,11 +148,23 @@ func play_music(track_name: String, volume_db: float = 0.0) -> void:
 func stop_music() -> void:
 	_music_player.stop()
 	_current_music = ""
+	_pending_music = ""
 
 
 func _on_music_finished() -> void:
 	if _current_music != "":
 		_music_player.play()
+
+
+func _input(event: InputEvent) -> void:
+	# Web browsers suspend audio until the first user interaction (click/key).
+	# Once we detect input, retry any pending music that was silently blocked.
+	if _audio_unlocked:
+		return
+	if event is InputEventMouseButton or event is InputEventKey or event is InputEventScreenTouch:
+		_audio_unlocked = true
+		if _pending_music != "" and not _music_player.playing:
+			play_music(_pending_music)
 
 
 func _get_free_player() -> AudioStreamPlayer:
