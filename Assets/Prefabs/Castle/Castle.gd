@@ -36,18 +36,21 @@ func _on_area_entered(area):
 
 		# Check armor — each armor point absorbs one full enemy hit
 		var upgrade_mgr: Node = get_node_or_null("/root/UpgradeManager")
+		var sfx: Node = get_node_or_null("/root/SFXManager")
 		if upgrade_mgr and upgrade_mgr.consume_armor():
-			print("Armor absorbed hit! Armor remaining: ", upgrade_mgr.get_castle_armor())
+			if sfx:
+				sfx.play("armor_block")
 			emit_signal("armor_changed", upgrade_mgr.get_castle_armor())
 			return
 
 		# No armor — take health damage
+		if sfx:
+			sfx.play("castle_hit")
 		var dmg = area.get("damage")
 		if dmg != null:
 			lives -= dmg
 		else:
 			lives -= 1
-		print("Lives remaining: ", lives)
 		emit_signal("lives_changed", lives, max_lives)
 		if lives <= 0:
 			emit_signal("game_over")

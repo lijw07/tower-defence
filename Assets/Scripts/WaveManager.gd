@@ -33,7 +33,6 @@ func _ready() -> void:
 func start_next_wave() -> void:
 	_current_wave_number += 1
 	var wave: WaveData = _get_wave(_current_wave_number)
-	print("Starting wave ", _current_wave_number)
 	emit_signal("wave_started", _current_wave_number)
 	_is_spawning = true
 	await _run_wave(wave)
@@ -62,14 +61,14 @@ func _generate_wave(n: int) -> WaveData:
 	wave.time_between_batches = max(0.5, 2.0 - excess * 0.1)
 
 	# ── Scaling ──────────────────────────────────────────────────────────────
-	# Health grows linearly — no cap, enemies always get tougher.
-	#   Wave  8 → ×1.10  |  Wave 15 → ×1.80  |  Wave 25 → ×2.80
-	wave.health_scale = 1.0 + excess * 0.10
+	# Health grows steadily — enemies always get tougher.
+	#   Wave  8 → ×1.15  |  Wave 15 → ×2.20  |  Wave 25 → ×3.70
+	wave.health_scale = 1.0 + excess * 0.15
 
-	# Movement speed grows 4 % per wave, hard-capped at 2× base speed.
+	# Movement speed grows 3 % per wave, hard-capped at 1.6× base speed.
 	# (Prevents Ghost / Demon from becoming physically impossible to hit.)
-	#   Wave  8 → ×1.04  |  Wave 20 → ×1.52  |  Wave 33+ → ×2.00 (cap)
-	wave.speed_scale = min(2.0, 1.0 + excess * 0.04)
+	#   Wave  8 → ×1.03  |  Wave 15 → ×1.24  |  Wave 27+ → ×1.60 (cap)
+	wave.speed_scale = min(1.6, 1.0 + excess * 0.03)
 
 	wave.entries = _build_entries(n, excess)
 	return wave
@@ -85,8 +84,8 @@ func _build_entries(n: int, excess: int) -> Array[WaveEntry]:
 	var num_types: int = min(pool.size(), 2 + (excess % 2))
 
 	# Spawn count and interval scale with wave number.
-	var count: int    = min(30, 8 + int(excess * 1.5))
-	var interval: float = max(0.4, 1.5 - excess * 0.04)
+	var count: int    = min(25, 6 + excess)
+	var interval: float = max(0.5, 1.4 - excess * 0.05)
 
 	for i in range(num_types):
 		var entry := WaveEntry.new()
@@ -146,7 +145,6 @@ func _on_enemy_removed() -> void:
 func _check_wave_complete() -> void:
 	if _is_spawning or _enemies_alive > 0:
 		return
-	print("Wave ", _current_wave_number, " complete!")
 	GameManager.record_wave_completed()
 	emit_signal("wave_completed", _current_wave_number)
 	# The game never ends — WaveClearUI calls proceed_to_next_wave() when ready.

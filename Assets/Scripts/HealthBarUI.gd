@@ -31,7 +31,6 @@ func _build_ui() -> void:
 	style.border_width_top = 0
 	style.border_width_left = 0
 	style.set_corner_radius_all(0)
-	style.corner_radius_bottom_right = 8
 	style.set_content_margin_all(10)
 	style.content_margin_left = 14
 	style.content_margin_right = 14
@@ -53,12 +52,17 @@ func _build_ui() -> void:
 
 	var heart_label := Label.new()
 	heart_label.text = "HP"
-	heart_label.add_theme_font_size_override("font_size", 13)
+	heart_label.add_theme_font_size_override("font_size", 8)
+	var _pf: Font = UITheme.get_pixel_font()
+	if _pf:
+		heart_label.add_theme_font_override("font", _pf)
 	heart_label.add_theme_color_override("font_color", UITheme.TEXT_RED)
 	hbox.add_child(heart_label)
 
 	_label = Label.new()
-	_label.add_theme_font_size_override("font_size", 13)
+	_label.add_theme_font_size_override("font_size", 8)
+	if _pf:
+		_label.add_theme_font_override("font", _pf)
 	_label.add_theme_color_override("font_color", UITheme.TEXT)
 	hbox.add_child(_label)
 
@@ -69,7 +73,7 @@ func _build_ui() -> void:
 	bg_style.bg_color = Color(0.15, 0.15, 0.15, 1.0)
 	bg_style.border_color = UITheme.BORDER_LIGHT
 	bg_style.set_border_width_all(1)
-	bg_style.set_corner_radius_all(3)
+	bg_style.set_corner_radius_all(0)
 	_bar_bg.add_theme_stylebox_override("panel", bg_style)
 	vbox.add_child(_bar_bg)
 
@@ -79,7 +83,7 @@ func _build_ui() -> void:
 	_bar_fill.size = Vector2(136, 10)
 	_bar_fill_style = StyleBoxFlat.new()
 	_bar_fill_style.bg_color = Color(0.2, 0.75, 0.3, 1.0)
-	_bar_fill_style.set_corner_radius_all(2)
+	_bar_fill_style.set_corner_radius_all(0)
 	_bar_fill.add_theme_stylebox_override("panel", _bar_fill_style)
 	_bar_bg.add_child(_bar_fill)
 
@@ -90,12 +94,16 @@ func _build_ui() -> void:
 
 	var armor_icon := Label.new()
 	armor_icon.text = "AR"
-	armor_icon.add_theme_font_size_override("font_size", 13)
+	armor_icon.add_theme_font_size_override("font_size", 8)
+	if _pf:
+		armor_icon.add_theme_font_override("font", _pf)
 	armor_icon.add_theme_color_override("font_color", Color(0.45, 0.65, 0.90))
 	_armor_row.add_child(armor_icon)
 
 	_armor_label = Label.new()
-	_armor_label.add_theme_font_size_override("font_size", 13)
+	_armor_label.add_theme_font_size_override("font_size", 8)
+	if _pf:
+		_armor_label.add_theme_font_override("font", _pf)
 	_armor_label.add_theme_color_override("font_color", UITheme.TEXT)
 	_armor_row.add_child(_armor_label)
 
@@ -106,7 +114,7 @@ func _build_ui() -> void:
 	armor_bg_style.bg_color = Color(0.15, 0.15, 0.15, 1.0)
 	armor_bg_style.border_color = UITheme.BORDER_LIGHT
 	armor_bg_style.set_border_width_all(1)
-	armor_bg_style.set_corner_radius_all(3)
+	armor_bg_style.set_corner_radius_all(0)
 	_armor_bar_bg.add_theme_stylebox_override("panel", armor_bg_style)
 	vbox.add_child(_armor_bar_bg)
 
@@ -116,7 +124,7 @@ func _build_ui() -> void:
 	_armor_bar_fill.size = Vector2(0, 10)
 	_armor_bar_fill_style = StyleBoxFlat.new()
 	_armor_bar_fill_style.bg_color = Color(0.35, 0.55, 0.85, 1.0)
-	_armor_bar_fill_style.set_corner_radius_all(2)
+	_armor_bar_fill_style.set_corner_radius_all(0)
 	_armor_bar_fill.add_theme_stylebox_override("panel", _armor_bar_fill_style)
 	_armor_bar_bg.add_child(_armor_bar_fill)
 

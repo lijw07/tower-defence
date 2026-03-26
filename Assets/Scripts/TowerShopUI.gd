@@ -13,7 +13,10 @@ var _tower_buttons: Array[Button] = []
 
 var _tooltip_panel: PanelContainer
 var _tooltip_name: Label
-var _tooltip_stats: Label
+var _tooltip_cost: Label
+var _tooltip_dmg: Label
+var _tooltip_spd: Label
+var _tooltip_range: Label
 var _tooltip_desc: Label
 var _tooltip_sell: Label
 
@@ -49,8 +52,6 @@ func _build_shop_bar() -> void:
 	style.set_border_width_all(2)
 	style.border_width_bottom = 0
 	style.set_corner_radius_all(0)
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
 	style.set_content_margin_all(8)
 	style.shadow_color = Color(0, 0, 0, 0.3)
 	style.shadow_size = 6
@@ -83,8 +84,11 @@ func _build_shop_bar() -> void:
 	hbox.add_child(right_col)
 
 	_gold_label = Label.new()
-	_gold_label.add_theme_font_size_override("font_size", 16)
+	_gold_label.add_theme_font_size_override("font_size", 10)
 	_gold_label.add_theme_color_override("font_color", UITheme.GOLD)
+	var _pf: Font = UITheme.get_pixel_font()
+	if _pf:
+		_gold_label.add_theme_font_override("font", _pf)
 	_gold_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_gold_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	right_col.add_child(_gold_label)
@@ -94,7 +98,7 @@ func _build_shop_bar() -> void:
 	_upgrade_btn.custom_minimum_size = Vector2(72, 30)
 	_upgrade_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	UITheme.style_button(_upgrade_btn)
-	_upgrade_btn.add_theme_font_size_override("font_size", 12)
+	_upgrade_btn.add_theme_font_size_override("font_size", 8)
 	_upgrade_btn.pressed.connect(_on_upgrade_pressed)
 	right_col.add_child(_upgrade_btn)
 
@@ -113,23 +117,36 @@ func _build_tooltip() -> void:
 	_tooltip_panel.visible = false
 
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 4)
+	vbox.add_theme_constant_override("separation", 6)
 	_tooltip_panel.add_child(vbox)
 
-	_tooltip_name = UITheme.make_label("", 15, UITheme.GOLD)
+	_tooltip_name = UITheme.make_label("", 12, UITheme.GOLD)
 	vbox.add_child(_tooltip_name)
-
-	_tooltip_stats = UITheme.make_label("", 12, UITheme.TEXT)
-	vbox.add_child(_tooltip_stats)
 
 	vbox.add_child(UITheme.make_separator())
 
-	_tooltip_desc = UITheme.make_label("", 11, UITheme.TEXT_GREEN)
+	_tooltip_cost = UITheme.make_label("", 9, UITheme.TEXT_ORANGE)
+	vbox.add_child(_tooltip_cost)
+
+	_tooltip_dmg = UITheme.make_label("", 9, UITheme.TEXT)
+	vbox.add_child(_tooltip_dmg)
+
+	_tooltip_spd = UITheme.make_label("", 9, UITheme.TEXT)
+	vbox.add_child(_tooltip_spd)
+
+	_tooltip_range = UITheme.make_label("", 9, UITheme.TEXT)
+	vbox.add_child(_tooltip_range)
+
+	vbox.add_child(UITheme.make_separator())
+
+	_tooltip_desc = UITheme.make_label("", 8, UITheme.TEXT_DIM)
 	_tooltip_desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_tooltip_desc.custom_minimum_size.x = 200
+	_tooltip_desc.custom_minimum_size.x = 210
 	vbox.add_child(_tooltip_desc)
 
-	_tooltip_sell = UITheme.make_label("", 11, UITheme.TEXT_ORANGE)
+	vbox.add_child(UITheme.make_separator())
+
+	_tooltip_sell = UITheme.make_label("", 8, UITheme.TEXT_GREEN)
 	vbox.add_child(_tooltip_sell)
 
 	add_child(_tooltip_panel)
@@ -143,11 +160,11 @@ func _create_tower_button(data: TowerData) -> void:
 		btn.expand_icon = true
 		btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var scaled: int = GameManager.get_scaled_cost(data.cost, data.tower_name)
-	btn.text = "%d g" % scaled
+	btn.text = "%dg" % scaled
 	btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 	btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	UITheme.style_button(btn)
-	btn.add_theme_font_size_override("font_size", 11)
+	btn.add_theme_font_size_override("font_size", 7)
 	btn.add_theme_constant_override("icon_max_width", 40)
 	btn.pressed.connect(_on_tower_button_pressed.bind(data))
 	btn.mouse_entered.connect(_on_button_hover.bind(btn, data))
@@ -167,8 +184,18 @@ func _on_button_hover(btn: Button, data: TowerData) -> void:
 	if upgrade_mgr:
 		eff_dmg = data.damage * upgrade_mgr.get_damage_multiplier(data.tower_name)
 		eff_spd = data.attack_speed / upgrade_mgr.get_speed_multiplier(data.tower_name)
+	# Get range from PlacementManager's cache
+	var range_val: float = 0.0
+	var pm: Node = get_node_or_null("../PlacementManager")
+	if pm and pm.has_method("get_tower_range_cached"):
+		range_val = pm.get_tower_range_cached(data)
+
 	_tooltip_name.text = data.tower_name
-	_tooltip_stats.text = "Cost: %d  |  Damage: %d  |  Speed: %.1fs" % [scaled, int(eff_dmg), eff_spd]
+	_tooltip_cost.text = "Cost: %d gold" % scaled
+	_tooltip_dmg.text = "Damage: %d" % int(eff_dmg)
+	_tooltip_spd.text = "Speed:  %.1fs" % eff_spd
+	_tooltip_range.text = "Range:  %d" % int(range_val) if range_val > 0.0 else ""
+	_tooltip_range.visible = range_val > 0.0
 	_tooltip_desc.text = data.description if data.description != "" else "No description."
 	_tooltip_sell.text = "Sell value: %d gold" % sell_val
 
@@ -189,7 +216,12 @@ func _on_button_hover_end() -> void:
 
 func _on_tower_button_pressed(data: TowerData) -> void:
 	if GameManager.gold >= GameManager.get_scaled_cost(data.cost, data.tower_name):
+		_tooltip_panel.visible = false
 		emit_signal("tower_selected", data)
+
+## Called when tower placement ends (placed or cancelled).
+func on_placement_ended() -> void:
+	pass
 
 func _on_gold_changed(new_amount: int) -> void:
 	_update_gold_display(new_amount)
@@ -210,11 +242,24 @@ func _on_tower_unlocked(tower_name: String) -> void:
 		if data.tower_name == tower_name:
 			_create_tower_button(data)
 			break
+	# Re-sort buttons by base cost (cheapest first)
+	_sort_buttons_by_cost()
 	_refresh_all_affordability()
 	# Reposition panel after the new button is added
 	if is_inside_tree():
 		await get_tree().process_frame
 		_reposition_panel()
+
+func _sort_buttons_by_cost() -> void:
+	# Sort the _tower_buttons array by base cost
+	_tower_buttons.sort_custom(func(a: Button, b: Button) -> bool:
+		var da: TowerData = a.get_meta("tower_data")
+		var db: TowerData = b.get_meta("tower_data")
+		return da.cost < db.cost
+	)
+	# Reorder children in the container to match
+	for i in range(_tower_buttons.size()):
+		_button_container.move_child(_tower_buttons[i], i)
 
 func _on_upgrade_pressed() -> void:
 	emit_signal("upgrade_pressed")
@@ -231,12 +276,14 @@ func _refresh_all_costs() -> void:
 		if is_instance_valid(btn) and btn.has_meta("tower_data"):
 			var data: TowerData = btn.get_meta("tower_data")
 			var scaled: int = GameManager.get_scaled_cost(data.cost, data.tower_name)
-			btn.text = "%d g" % scaled
+			btn.text = "%dg" % scaled
 			_update_button_affordability(btn, scaled)
 
 func _update_button_affordability(btn: Button, cost: int) -> void:
 	var can_afford := GameManager.gold >= cost
 	btn.disabled = not can_afford
+	# Keep mouse_filter so hover tooltip works even on disabled buttons
+	btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	if can_afford:
 		btn.modulate = Color.WHITE
 		btn.add_theme_color_override("font_color", UITheme.TEXT)

@@ -2,8 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://hgtpopuo8uve" path="res://Assets/Scene/ground.tscn" id="1_wskab"]
 [ext_resource type="Script" uid="uid://bk23rqe7v7tpj" path="res://Assets/Scripts/WaveData.gd" id="6_kwnq3"]
-[ext_resource type="PackedScene" uid="uid://ca5qngr51gfs4" path="res://Assets/Prefabs/Castle/castle_blue.tscn" id="8_atycb"]
-[ext_resource type="PackedScene" uid="uid://b074w6fdhy242" path="res://Assets/Prefabs/CastleTower/castle_tower_blue.tscn" id="9_j31b1"]
 [ext_resource type="Script" uid="uid://c5tl5wx81xmlh" path="res://Assets/Scripts/WaveManager.gd" id="10_6ynwd"]
 [ext_resource type="Script" uid="uid://okgr1lwhyukl" path="res://Assets/Scripts/SceneRoot.gd" id="12_scene"]
 [ext_resource type="PackedScene" path="res://Assets/Scene/game_over_ui.tscn" id="13_goui"]
@@ -22,26 +20,27 @@
 [ext_resource type="Resource" uid="uid://doa511uqhyquh" path="res://Resource/Waves/Wave6.tres" id="w6"]
 [ext_resource type="Resource" uid="uid://t3epp1v5w4ie" path="res://Resource/Waves/Wave7.tres" id="w7"]
 
-[sub_resource type="Curve2D" id="Curve2D_dgmkv"]
+[sub_resource type="Curve2D" id="Curve2D_ll6xt"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -223, -8, 0, 0, 0, 0, -89, -9, 0, 0, 0, 0, -87, -86, 0, 0, 0, 0, 39, -87, 0, 0, 0, 0, 38, 39, 0, 0, 0, 0, -38, 41, 0, 0, 0, 0, -40, 111)
+"points": PackedVector2Array(0, 0, 0, 0, -121, -161, 0, 0, 0, 0, -120, -57, 0, 0, 0, 0, -199, -54, 0, 0, 0, 0, -199, 102, 0, 0, 0, 0, -88, 103, 0, 0, 0, 0, -87, 25, 0, 0, 0, 0, 23, 23, 0, 0, 0, 0, 25, -70, 0, 0, 0, 0, 152, -70, 0, 0, 0, 0, 153, 38, 0, 0, 0, 0, 199, 41, 0, 0, 0, 0, 202, 132)
 }
-point_count = 7
+point_count = 12
 
 [node name="Scene" type="Node2D" unique_id=1850568721]
 script = ExtResource("12_scene")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=129409900]
-zoom = Vector2(2.5, 2.5)
+zoom = Vector2(2, 2)
 
-[node name="Ground" parent="." unique_id=1895181922 instance=ExtResource("1_wskab")]
+[node name="SpringBiomeMap" parent="." unique_id=1895181922 instance=ExtResource("1_wskab")]
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1986241844]
-curve = SubResource("Curve2D_dgmkv")
+curve = SubResource("Curve2D_ll6xt")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=430028514]
-position = Vector2(-223, -8)
-rotation = -0.007462548
+position = Vector2(-121, -161)
+rotation = 1.5611812
+metadata/_edit_group_ = true
 
 [node name="WaveManager" type="Node" parent="Path2D" unique_id=1312423637]
 script = ExtResource("10_6ynwd")
@@ -63,13 +62,3 @@ waves = Array[ExtResource("6_kwnq3")]([ExtResource("w1"), ExtResource("w2"), Ext
 
 [node name="PlacementManager" type="Node" parent="." unique_id=1319619396]
 script = ExtResource("15_place")
-
-[node name="CastleBlue" parent="." unique_id=227214491 instance=ExtResource("8_atycb")]
-position = Vector2(-40, 93)
-max_lives = 5
-
-[node name="CastleTowerBlue" parent="." unique_id=1649473510 instance=ExtResource("9_j31b1")]
-position = Vector2(-58, 63)
-
-[node name="CastleTowerBlue2" parent="." unique_id=1519840211 instance=ExtResource("9_j31b1")]
-position = Vector2(-18, 64)

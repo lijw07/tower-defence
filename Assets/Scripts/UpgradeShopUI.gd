@@ -15,14 +15,16 @@ var _castle_hp_btn: Button
 var _castle_armor_count_lbl: Label
 var _castle_armor_cost_lbl: Label
 var _castle_armor_btn: Button
+var _castle_heal_cost_lbl: Label
+var _castle_heal_btn: Button
 
-const CARD_WIDTH: float = 150.0
-const CARD_INNER: float = 130.0
-const BTN_SIZE := Vector2(130, 22)
-const SMALL_BTN := Vector2(60, 20)
-const FONT_TITLE: int = 11
-const FONT_SMALL: int = 8
-const FONT_BTN: int = 8
+const CARD_WIDTH: float = 120.0
+const CARD_INNER: float = 100.0
+const BTN_SIZE := Vector2(100, 20)
+const SMALL_BTN := Vector2(48, 18)
+const FONT_TITLE: int = 8
+const FONT_SMALL: int = 6
+const FONT_BTN: int = 6
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -62,26 +64,26 @@ func _build_shop_panel() -> void:
 	center.add_child(_panel)
 
 	var outer_vbox := VBoxContainer.new()
-	outer_vbox.add_theme_constant_override("separation", 5)
+	outer_vbox.add_theme_constant_override("separation", 6)
 	_panel.add_child(outer_vbox)
 
 	# Title
-	var title := UITheme.make_label("Shop", 16, UITheme.GOLD)
+	var title := UITheme.make_label("Shop", 14, UITheme.GOLD)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	outer_vbox.add_child(title)
 
 	outer_vbox.add_child(UITheme.make_separator())
 
 	# ── Tower section header ──
-	var tower_header := UITheme.make_label("Towers", 12, UITheme.TEXT_DIM)
+	var tower_header := UITheme.make_label("Towers", 10, UITheme.TEXT_DIM)
 	tower_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	outer_vbox.add_child(tower_header)
 
 	# 3-column grid for towers
 	_grid = GridContainer.new()
 	_grid.columns = 3
-	_grid.add_theme_constant_override("h_separation", 5)
-	_grid.add_theme_constant_override("v_separation", 5)
+	_grid.add_theme_constant_override("h_separation", 6)
+	_grid.add_theme_constant_override("v_separation", 6)
 	outer_vbox.add_child(_grid)
 
 	for data in _tower_data_list:
@@ -90,24 +92,25 @@ func _build_shop_panel() -> void:
 	outer_vbox.add_child(UITheme.make_separator())
 
 	# ── Castle section header ──
-	var castle_header := UITheme.make_label("Castle", 12, UITheme.TEXT_DIM)
+	var castle_header := UITheme.make_label("Castle", 10, UITheme.TEXT_DIM)
 	castle_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	outer_vbox.add_child(castle_header)
 
 	var castle_grid := GridContainer.new()
 	castle_grid.columns = 3
-	castle_grid.add_theme_constant_override("h_separation", 5)
-	castle_grid.add_theme_constant_override("v_separation", 5)
+	castle_grid.add_theme_constant_override("h_separation", 6)
+	castle_grid.add_theme_constant_override("v_separation", 6)
 	outer_vbox.add_child(castle_grid)
 
 	_build_castle_health_card(castle_grid)
 	_build_castle_armor_card(castle_grid)
+	_build_castle_heal_card(castle_grid)
 
 	outer_vbox.add_child(UITheme.make_separator())
 
 	# Close button
-	var close_btn := UITheme.make_button("Close", Vector2(90, 24))
-	close_btn.add_theme_font_size_override("font_size", 10)
+	var close_btn := UITheme.make_button("Close", Vector2(80, 20))
+	close_btn.add_theme_font_size_override("font_size", 6)
 	close_btn.pressed.connect(toggle_shop)
 	var close_row := CenterContainer.new()
 	close_row.add_child(close_btn)
@@ -120,13 +123,16 @@ func _build_castle_health_card(parent: GridContainer) -> void:
 	parent.add_child(card)
 
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 2)
+	vbox.add_theme_constant_override("separation", 3)
 	card.add_child(vbox)
 
-	vbox.add_child(UITheme.make_label("Castle HP", FONT_TITLE, UITheme.TEXT))
+	var hp_title := UITheme.make_label("Castle HP", FONT_TITLE, UITheme.TEXT)
+	hp_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(hp_title)
 
 	var desc := UITheme.make_label("+1 max HP per level", FONT_SMALL, UITheme.TEXT_DIM)
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc.custom_minimum_size.x = CARD_INNER
 	vbox.add_child(desc)
 
@@ -134,10 +140,12 @@ func _build_castle_health_card(parent: GridContainer) -> void:
 	_castle_hp_level_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_castle_hp_level_lbl)
 
+	var hp_btn_row := CenterContainer.new()
+	vbox.add_child(hp_btn_row)
 	_castle_hp_btn = UITheme.make_button("Upgrade", BTN_SIZE)
 	_castle_hp_btn.add_theme_font_size_override("font_size", FONT_BTN)
 	_castle_hp_btn.pressed.connect(_on_buy_castle_health)
-	vbox.add_child(_castle_hp_btn)
+	hp_btn_row.add_child(_castle_hp_btn)
 
 	_castle_hp_cost_lbl = UITheme.make_label("", FONT_SMALL, UITheme.GOLD)
 	_castle_hp_cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -148,13 +156,16 @@ func _build_castle_armor_card(parent: GridContainer) -> void:
 	parent.add_child(card)
 
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 2)
+	vbox.add_theme_constant_override("separation", 3)
 	card.add_child(vbox)
 
-	vbox.add_child(UITheme.make_label("Armor", FONT_TITLE, UITheme.TEXT))
+	var armor_title := UITheme.make_label("Armor", FONT_TITLE, UITheme.TEXT)
+	armor_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(armor_title)
 
 	var desc := UITheme.make_label("Blocks 1 full hit. Max 10.", FONT_SMALL, UITheme.TEXT_DIM)
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc.custom_minimum_size.x = CARD_INNER
 	vbox.add_child(desc)
 
@@ -162,20 +173,56 @@ func _build_castle_armor_card(parent: GridContainer) -> void:
 	_castle_armor_count_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_castle_armor_count_lbl)
 
+	var armor_btn_row := CenterContainer.new()
+	vbox.add_child(armor_btn_row)
 	_castle_armor_btn = UITheme.make_button("Buy", BTN_SIZE)
 	_castle_armor_btn.add_theme_font_size_override("font_size", FONT_BTN)
 	_castle_armor_btn.pressed.connect(_on_buy_castle_armor)
-	vbox.add_child(_castle_armor_btn)
+	armor_btn_row.add_child(_castle_armor_btn)
 
 	_castle_armor_cost_lbl = UITheme.make_label("", FONT_SMALL, UITheme.GOLD)
 	_castle_armor_cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_castle_armor_cost_lbl)
 
+func _build_castle_heal_card(parent: GridContainer) -> void:
+	var card := _make_card_panel()
+	parent.add_child(card)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 3)
+	card.add_child(vbox)
+
+	var heal_title := UITheme.make_label("Heal", FONT_TITLE, UITheme.TEXT)
+	heal_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(heal_title)
+
+	var desc := UITheme.make_label("Restore +1 HP to castle.", FONT_SMALL, UITheme.TEXT_DIM)
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc.custom_minimum_size.x = CARD_INNER
+	vbox.add_child(desc)
+
+	# Spacer to align with other cards
+	var spacer := Control.new()
+	spacer.custom_minimum_size.y = 2
+	vbox.add_child(spacer)
+
+	var heal_btn_row := CenterContainer.new()
+	vbox.add_child(heal_btn_row)
+	_castle_heal_btn = UITheme.make_button("Heal", BTN_SIZE)
+	_castle_heal_btn.add_theme_font_size_override("font_size", FONT_BTN)
+	_castle_heal_btn.pressed.connect(_on_buy_castle_heal)
+	heal_btn_row.add_child(_castle_heal_btn)
+
+	_castle_heal_cost_lbl = UITheme.make_label("", FONT_SMALL, UITheme.GOLD)
+	_castle_heal_cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_castle_heal_cost_lbl)
+
 # ── Tower card builder ────────────────────────────────────────────────────────
 
 func _make_card_panel() -> PanelContainer:
 	var card := PanelContainer.new()
-	var s := UITheme.make_panel_style(UITheme.BG_LIGHTER, 1, 4)
+	var s := UITheme.make_panel_style(UITheme.BG_LIGHTER, 1, 0)
 	s.set_content_margin_all(6)
 	card.add_theme_stylebox_override("panel", s)
 	card.custom_minimum_size = Vector2(CARD_WIDTH, 0)
@@ -186,41 +233,46 @@ func _build_tower_card(data: TowerData) -> void:
 	_grid.add_child(card_panel)
 
 	var card_vbox := VBoxContainer.new()
-	card_vbox.add_theme_constant_override("separation", 2)
+	card_vbox.add_theme_constant_override("separation", 4)
 	card_panel.add_child(card_vbox)
 
 	# Header: icon + name
 	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 4)
+	header.add_theme_constant_override("separation", 6)
 	card_vbox.add_child(header)
 
 	if data.icon != null:
 		var icon_rect := TextureRect.new()
 		icon_rect.texture = data.icon
-		icon_rect.custom_minimum_size = Vector2(20, 20)
+		icon_rect.custom_minimum_size = Vector2(16, 16)
 		icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 		header.add_child(icon_rect)
 
-	var name_col := VBoxContainer.new()
-	name_col.add_theme_constant_override("separation", 0)
-	name_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(name_col)
+	var name_lbl := UITheme.make_label(data.tower_name, FONT_TITLE, UITheme.TEXT)
+	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(name_lbl)
 
-	name_col.add_child(UITheme.make_label(data.tower_name, FONT_TITLE, UITheme.TEXT))
-
+	# Stats on its own line below the header, with natural card_vbox spacing
 	var stats_lbl := UITheme.make_label("", FONT_SMALL, UITheme.TEXT_DIM)
-	name_col.add_child(stats_lbl)
+	card_vbox.add_child(stats_lbl)
 
-	# Locked content
-	var locked_box := VBoxContainer.new()
-	locked_box.add_theme_constant_override("separation", 2)
-	card_vbox.add_child(locked_box)
-
+	# Description — always visible, even after unlock
 	var desc_lbl := UITheme.make_label(data.description, FONT_SMALL, UITheme.TEXT_DIM)
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	desc_lbl.custom_minimum_size.x = CARD_INNER
-	locked_box.add_child(desc_lbl)
+	card_vbox.add_child(desc_lbl)
+
+	# State wrapper — fixed height so the card never resizes on unlock
+	var state_wrapper := Control.new()
+	state_wrapper.custom_minimum_size.y = 42
+	card_vbox.add_child(state_wrapper)
+
+	# Locked content (unlock button only)
+	var locked_box := VBoxContainer.new()
+	locked_box.add_theme_constant_override("separation", 4)
+	locked_box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	state_wrapper.add_child(locked_box)
 
 	var unlock_btn := UITheme.make_button("Unlock", BTN_SIZE)
 	unlock_btn.add_theme_font_size_override("font_size", FONT_BTN)
@@ -229,13 +281,14 @@ func _build_tower_card(data: TowerData) -> void:
 
 	# Unlocked content: DMG + SPD side by side
 	var unlocked_box := HBoxContainer.new()
-	unlocked_box.add_theme_constant_override("separation", 3)
+	unlocked_box.add_theme_constant_override("separation", 8)
 	unlocked_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	card_vbox.add_child(unlocked_box)
+	unlocked_box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	state_wrapper.add_child(unlocked_box)
 
 	# DMG column
 	var dmg_col := VBoxContainer.new()
-	dmg_col.add_theme_constant_override("separation", 1)
+	dmg_col.add_theme_constant_override("separation", 3)
 	dmg_col.alignment = BoxContainer.ALIGNMENT_CENTER
 	dmg_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	unlocked_box.add_child(dmg_col)
@@ -255,7 +308,7 @@ func _build_tower_card(data: TowerData) -> void:
 
 	# SPD column
 	var spd_col := VBoxContainer.new()
-	spd_col.add_theme_constant_override("separation", 1)
+	spd_col.add_theme_constant_override("separation", 3)
 	spd_col.alignment = BoxContainer.ALIGNMENT_CENTER
 	spd_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	unlocked_box.add_child(spd_col)
@@ -319,19 +372,30 @@ func _refresh_card(cd: Dictionary) -> void:
 	var eff_spd: float = cd.base_speed / spd_mult
 	cd.stats_lbl.text = "DMG: %.0f | SPD: %.2fs" % [eff_dmg, eff_spd]
 
-	var dmg_cost: int = _upgrade_mgr.get_damage_upgrade_cost(tname)
+	var max_lvl: int = _upgrade_mgr.MAX_UPGRADE_LEVEL
 	cd.dmg_level_lbl.text = "Lv %d" % dmg_lvl
-	cd.dmg_cost_lbl.text = "%dG" % dmg_cost
-	var can_dmg := GameManager.gold >= dmg_cost
-	cd.dmg_btn.disabled = not can_dmg
-	cd.dmg_btn.modulate = Color.WHITE if can_dmg else Color(0.4, 0.4, 0.4, 0.7)
+	if dmg_lvl >= max_lvl:
+		cd.dmg_cost_lbl.text = "MAX"
+		cd.dmg_btn.disabled = true
+		cd.dmg_btn.modulate = Color(0.4, 0.4, 0.4, 0.7)
+	else:
+		var dmg_cost: int = _upgrade_mgr.get_damage_upgrade_cost(tname)
+		cd.dmg_cost_lbl.text = "%dG" % dmg_cost
+		var can_dmg := GameManager.gold >= dmg_cost
+		cd.dmg_btn.disabled = not can_dmg
+		cd.dmg_btn.modulate = Color.WHITE if can_dmg else Color(0.4, 0.4, 0.4, 0.7)
 
-	var spd_cost: int = _upgrade_mgr.get_speed_upgrade_cost(tname)
 	cd.spd_level_lbl.text = "Lv %d" % spd_lvl
-	cd.spd_cost_lbl.text = "%dG" % spd_cost
-	var can_spd := GameManager.gold >= spd_cost
-	cd.spd_btn.disabled = not can_spd
-	cd.spd_btn.modulate = Color.WHITE if can_spd else Color(0.4, 0.4, 0.4, 0.7)
+	if spd_lvl >= max_lvl:
+		cd.spd_cost_lbl.text = "MAX"
+		cd.spd_btn.disabled = true
+		cd.spd_btn.modulate = Color(0.4, 0.4, 0.4, 0.7)
+	else:
+		var spd_cost: int = _upgrade_mgr.get_speed_upgrade_cost(tname)
+		cd.spd_cost_lbl.text = "%dG" % spd_cost
+		var can_spd := GameManager.gold >= spd_cost
+		cd.spd_btn.disabled = not can_spd
+		cd.spd_btn.modulate = Color.WHITE if can_spd else Color(0.4, 0.4, 0.4, 0.7)
 
 func _refresh_castle_section() -> void:
 	if _castle_hp_btn == null:
@@ -358,6 +422,19 @@ func _refresh_castle_section() -> void:
 		_castle_armor_btn.disabled = true
 		_castle_armor_btn.modulate = Color(0.4, 0.4, 0.4, 0.7)
 
+	# Heal card
+	if _castle_heal_btn != null:
+		if _upgrade_mgr.is_castle_full_health():
+			_castle_heal_cost_lbl.text = "FULL"
+			_castle_heal_btn.disabled = true
+			_castle_heal_btn.modulate = Color(0.4, 0.4, 0.4, 0.7)
+		else:
+			var heal_cost: int = _upgrade_mgr.get_castle_heal_cost()
+			_castle_heal_cost_lbl.text = "%dG" % heal_cost
+			var can_heal := GameManager.gold >= heal_cost
+			_castle_heal_btn.disabled = not can_heal
+			_castle_heal_btn.modulate = Color.WHITE if can_heal else Color(0.4, 0.4, 0.4, 0.7)
+
 func _refresh_all() -> void:
 	for cd in _tower_cards:
 		_refresh_card(cd)
@@ -367,23 +444,43 @@ func _refresh_all() -> void:
 
 func toggle_shop() -> void:
 	_overlay.visible = not _overlay.visible
+	var sfx: Node = get_node_or_null("/root/SFXManager")
 	if _overlay.visible:
+		if sfx:
+			sfx.play("shop_open")
 		_refresh_all()
+	else:
+		if sfx:
+			sfx.play("shop_close")
+
+func _play_buy_sfx() -> void:
+	var sfx: Node = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play("upgrade_buy")
 
 func _on_unlock_pressed(data: TowerData) -> void:
-	_upgrade_mgr.unlock_tower(data.tower_name, data.unlock_cost)
+	if _upgrade_mgr.unlock_tower(data.tower_name, data.unlock_cost):
+		_play_buy_sfx()
 
 func _on_buy_damage(tower_name: String) -> void:
-	_upgrade_mgr.buy_damage_upgrade(tower_name)
+	if _upgrade_mgr.buy_damage_upgrade(tower_name):
+		_play_buy_sfx()
 
 func _on_buy_speed(tower_name: String) -> void:
-	_upgrade_mgr.buy_speed_upgrade(tower_name)
+	if _upgrade_mgr.buy_speed_upgrade(tower_name):
+		_play_buy_sfx()
 
 func _on_buy_castle_health() -> void:
-	_upgrade_mgr.buy_castle_health_upgrade()
+	if _upgrade_mgr.buy_castle_health_upgrade():
+		_play_buy_sfx()
 
 func _on_buy_castle_armor() -> void:
-	_upgrade_mgr.buy_castle_armor()
+	if _upgrade_mgr.buy_castle_armor():
+		_play_buy_sfx()
+
+func _on_buy_castle_heal() -> void:
+	if _upgrade_mgr.buy_castle_heal():
+		_play_buy_sfx()
 
 func _on_gold_changed(_amount: int) -> void:
 	if _overlay.visible:

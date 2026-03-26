@@ -7,10 +7,12 @@ extends CanvasLayer
 signal tower_sold(tower: Node2D)
 
 var _selected_tower: Node2D = null
+var _range_indicator: Node2D = null
 
 var _panel: PanelContainer
 var _name_label: Label
-var _stats_label: Label
+var _dmg_label: Label
+var _spd_label: Label
 var _desc_label: Label
 var _sell_btn: Button
 
@@ -24,23 +26,30 @@ func _build_ui() -> void:
 	add_child(_panel)
 
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 5)
+	vbox.add_theme_constant_override("separation", 8)
 	_panel.add_child(vbox)
 
 	_name_label = UITheme.make_label("", 14, UITheme.GOLD)
 	vbox.add_child(_name_label)
 
-	_stats_label = UITheme.make_label("", 11, UITheme.TEXT)
-	vbox.add_child(_stats_label)
+	vbox.add_child(UITheme.make_separator())
+
+	_dmg_label = UITheme.make_label("", 10, UITheme.TEXT)
+	vbox.add_child(_dmg_label)
+
+	_spd_label = UITheme.make_label("", 10, UITheme.TEXT)
+	vbox.add_child(_spd_label)
 
 	vbox.add_child(UITheme.make_separator())
 
-	_desc_label = UITheme.make_label("", 10, UITheme.TEXT_GREEN)
+	_desc_label = UITheme.make_label("", 9, UITheme.TEXT_DIM)
 	_desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_desc_label.custom_minimum_size.x = 180
+	_desc_label.custom_minimum_size.x = 190
 	vbox.add_child(_desc_label)
 
-	_sell_btn = UITheme.make_button("Sell", Vector2(180, 30))
+	vbox.add_child(UITheme.make_separator())
+
+	_sell_btn = UITheme.make_button("Sell", Vector2(190, 30))
 	_sell_btn.pressed.connect(_on_sell_pressed)
 	vbox.add_child(_sell_btn)
 
@@ -57,8 +66,27 @@ func select_tower(tower: Node2D) -> void:
 	if upgrade_mgr:
 		eff_dmg = data.damage * upgrade_mgr.get_damage_multiplier(data.tower_name)
 		eff_spd = data.attack_speed / upgrade_mgr.get_speed_multiplier(data.tower_name)
+	# Show range indicator on the tower
+	_hide_range_indicator()
+	var pm: Node = get_node_or_null("../PlacementManager")
+	if pm and pm.has_method("get_tower_range_cached"):
+		var radius: float = pm.get_tower_range_cached(data)
+		if radius > 0.0:
+			var ri_script: GDScript = load("res://Assets/Scripts/RangeIndicator.gd") as GDScript
+			_range_indicator = Node2D.new()
+			_range_indicator.set_script(ri_script)
+			_range_indicator.z_index = 999
+			_range_indicator.global_position = tower.global_position
+			get_tree().current_scene.add_child(_range_indicator)
+			_range_indicator.set_radius(radius)
+			_range_indicator.set_color(
+				Color(1.0, 0.85, 0.2, 0.4),
+				Color(1.0, 0.85, 0.2, 0.07)
+			)
+
 	_name_label.text = data.tower_name
-	_stats_label.text = "Damage: %d  |  Speed: %.1fs" % [int(eff_dmg), eff_spd]
+	_dmg_label.text = "Damage: %d" % int(eff_dmg)
+	_spd_label.text = "Speed:  %.1fs" % eff_spd
 	_desc_label.text = data.description if data.description != "" else "No description."
 	_sell_btn.text = "Sell (%d gold)" % sell_value
 
@@ -75,11 +103,36 @@ func select_tower(tower: Node2D) -> void:
 		screen_pos = (tower.global_position - cam.global_position) * cam.zoom + get_viewport().get_visible_rect().size * 0.5
 	else:
 		screen_pos = tower.global_position
-	_panel.global_position = Vector2(screen_pos.x + 20, screen_pos.y - _panel.size.y * 0.5)
+	var panel_size: Vector2 = _panel.size
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var margin: float = 8.0
+
+	# Try to place to the right of the tower
+	var px: float = screen_pos.x + 20
+	var py: float = screen_pos.y - panel_size.y * 0.5
+
+	# If it goes off the right edge, flip to the left of the tower
+	if px + panel_size.x > viewport_size.x - margin:
+		px = screen_pos.x - panel_size.x - 20
+
+	# Clamp left edge
+	if px < margin:
+		px = margin
+
+	# Clamp top / bottom
+	py = clampf(py, margin, viewport_size.y - panel_size.y - margin)
+
+	_panel.global_position = Vector2(px, py)
 
 func deselect() -> void:
 	_selected_tower = null
 	_panel.visible = false
+	_hide_range_indicator()
+
+func _hide_range_indicator() -> void:
+	if _range_indicator != null:
+		_range_indicator.queue_free()
+		_range_indicator = null
 
 func _on_sell_pressed() -> void:
 	if _selected_tower == null or not is_instance_valid(_selected_tower):

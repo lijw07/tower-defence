@@ -2,12 +2,12 @@ extends Node
 
 signal gold_changed(new_amount: int)
 
-const STARTING_GOLD: int = 100
+const STARTING_GOLD: int = 115
 
 var gold: int = STARTING_GOLD
 
 # ── Per-tower-type cost scaling ──────────────────────────────────────────────
-const COST_SCALE_PER_TOWER: float = 1.5
+const COST_SCALE_PER_TOWER: float = 1.25
 
 signal towers_placed_changed
 

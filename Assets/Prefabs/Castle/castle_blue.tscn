@@ -40,7 +40,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kon25"]
-size = Vector2(52, 38)
+size = Vector2(52, 23)
 
 [node name="Area2D" type="Area2D" unique_id=227214491]
 script = ExtResource("1_fbodb")
@@ -48,8 +48,9 @@ script = ExtResource("1_fbodb")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=980502535]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_kcja2")
-autoplay = &"default"
+autoplay = "default"
 frame_progress = 0.7938745
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=505497674]
+position = Vector2(0, 7.5)
 shape = SubResource("RectangleShape2D_kon25")

@@ -7,6 +7,6 @@
 script = ExtResource("1_mo7rs")
 enemy_name = "Goblin"
 scene = ExtResource("1_xleva")
-health = 250.0
-reward = 20
+speed = 75.0
+reward = 12
 metadata/_custom_type_script = "uid://daiuak44pcfwq"

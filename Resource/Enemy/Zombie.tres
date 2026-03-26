@@ -7,5 +7,7 @@
 script = ExtResource("1_so18u")
 enemy_name = "Zombie"
 scene = ExtResource("1_i5xjy")
-health = 250.0
+speed = 35.0
+health = 80.0
+reward = 15
 metadata/_custom_type_script = "uid://daiuak44pcfwq"

@@ -18,6 +18,10 @@ func _process(delta: float) -> void:
 	global_position += direction * SPEED * delta
 	rotation = direction.angle()
 
+	# Keep projectiles above towers (towers use 1000 + y)
+	z_index = 2000 + int(global_position.y)
+
 	if global_position.distance_to(_target.global_position) < 4.0:
+		PixelFX.spawn_arrow_hit(get_tree(), _target.global_position)
 		_target.take_damage(_damage)
 		queue_free()

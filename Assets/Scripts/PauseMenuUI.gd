@@ -1,13 +1,21 @@
 # PauseMenuUI.gd
-# Pressing ESC pauses the game and shows Resume / Exit buttons.
+# Pressing ESC pauses the game and shows Resume / Settings / Exit buttons.
 extends CanvasLayer
 
 const MAIN_MENU_PATH = "res://Assets/Scene/main_menu.tscn"
 
 var _is_paused: bool = false
+var _showing_settings: bool = false
 
 var _overlay: ColorRect
 var _panel: PanelContainer
+var _main_vbox: VBoxContainer
+var _settings_vbox: VBoxContainer
+
+var _music_slider: HSlider
+var _sfx_slider: HSlider
+var _music_value_label: Label
+var _sfx_value_label: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -30,35 +38,139 @@ func _build_ui() -> void:
 	_panel.anchor_right = 0.5
 	_panel.anchor_top = 0.5
 	_panel.anchor_bottom = 0.5
-	_panel.offset_left = -120
-	_panel.offset_right = 120
-	_panel.offset_top = -85
-	_panel.offset_bottom = 85
+	_panel.offset_left = -140
+	_panel.offset_right = 140
+	_panel.offset_top = -110
+	_panel.offset_bottom = 110
 
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 12)
-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	_panel.add_child(vbox)
+	var root_vbox := VBoxContainer.new()
+	root_vbox.add_theme_constant_override("separation", 0)
+	_panel.add_child(root_vbox)
 
-	var title := UITheme.make_title("Paused", 22)
+	# ── Main menu (Resume / Settings / Exit) ──
+	_main_vbox = VBoxContainer.new()
+	_main_vbox.add_theme_constant_override("separation", 10)
+	_main_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	root_vbox.add_child(_main_vbox)
+
+	var title := UITheme.make_title("Paused", 14)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(title)
+	_main_vbox.add_child(title)
 
-	vbox.add_child(UITheme.make_separator())
+	_main_vbox.add_child(UITheme.make_separator())
 
 	var resume_btn := UITheme.make_button("Resume")
 	resume_btn.pressed.connect(_on_resume_pressed)
-	vbox.add_child(resume_btn)
+	_main_vbox.add_child(resume_btn)
+
+	var settings_btn := UITheme.make_button("Settings")
+	settings_btn.pressed.connect(_show_settings)
+	_main_vbox.add_child(settings_btn)
 
 	var exit_btn := UITheme.make_button("Exit")
 	exit_btn.pressed.connect(_on_exit_pressed)
-	vbox.add_child(exit_btn)
+	_main_vbox.add_child(exit_btn)
+
+	# ── Settings panel (volume sliders) ──
+	_settings_vbox = VBoxContainer.new()
+	_settings_vbox.add_theme_constant_override("separation", 8)
+	_settings_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	_settings_vbox.visible = false
+	root_vbox.add_child(_settings_vbox)
+
+	var stitle := UITheme.make_title("Settings", 14)
+	stitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_settings_vbox.add_child(stitle)
+
+	_settings_vbox.add_child(UITheme.make_separator())
+
+	# Music volume
+	var music_row := HBoxContainer.new()
+	music_row.add_theme_constant_override("separation", 8)
+	var music_lbl := UITheme.make_label("Music", 8, UITheme.TEXT)
+	music_lbl.custom_minimum_size.x = 50
+	music_row.add_child(music_lbl)
+
+	var sfx_node: Node = get_node_or_null("/root/SFXManager")
+	var music_init: float = 1.0
+	if sfx_node:
+		music_init = sfx_node.get_music_volume_linear()
+	_music_slider = UITheme.make_hslider(0.0, 1.0, music_init)
+	_music_slider.value_changed.connect(_on_music_volume_changed)
+	music_row.add_child(_music_slider)
+	_music_value_label = UITheme.make_label(_pct(music_init), 8, UITheme.TEXT_DIM)
+	_music_value_label.custom_minimum_size.x = 35
+	_music_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	music_row.add_child(_music_value_label)
+	_settings_vbox.add_child(music_row)
+
+	# SFX volume
+	var sfx_row := HBoxContainer.new()
+	sfx_row.add_theme_constant_override("separation", 8)
+	var sfx_lbl := UITheme.make_label("SFX", 8, UITheme.TEXT)
+	sfx_lbl.custom_minimum_size.x = 50
+	sfx_row.add_child(sfx_lbl)
+
+	var sfx_init: float = 1.0
+	if sfx_node:
+		sfx_init = sfx_node.get_sfx_volume_linear()
+	_sfx_slider = UITheme.make_hslider(0.0, 1.0, sfx_init)
+	_sfx_slider.value_changed.connect(_on_sfx_volume_changed)
+	sfx_row.add_child(_sfx_slider)
+	_sfx_value_label = UITheme.make_label(_pct(sfx_init), 8, UITheme.TEXT_DIM)
+	_sfx_value_label.custom_minimum_size.x = 35
+	_sfx_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	sfx_row.add_child(_sfx_value_label)
+	_settings_vbox.add_child(sfx_row)
+
+	# Back button
+	var spacer := Control.new()
+	spacer.custom_minimum_size.y = 4
+	_settings_vbox.add_child(spacer)
+
+	var back_btn := UITheme.make_button("Back")
+	back_btn.pressed.connect(_hide_settings)
+	_settings_vbox.add_child(back_btn)
 
 	add_child(_panel)
 
+
+func _pct(val: float) -> String:
+	return "%d%%" % int(val * 100.0)
+
+
+func _on_music_volume_changed(value: float) -> void:
+	var sfx_node: Node = get_node_or_null("/root/SFXManager")
+	if sfx_node:
+		sfx_node.set_music_volume(value)
+	_music_value_label.text = _pct(value)
+
+
+func _on_sfx_volume_changed(value: float) -> void:
+	var sfx_node: Node = get_node_or_null("/root/SFXManager")
+	if sfx_node:
+		sfx_node.set_sfx_volume(value)
+		sfx_node.play("button_click")  # Preview the SFX volume
+	_sfx_value_label.text = _pct(value)
+
+
+func _show_settings() -> void:
+	_showing_settings = true
+	_main_vbox.visible = false
+	_settings_vbox.visible = true
+
+
+func _hide_settings() -> void:
+	_showing_settings = false
+	_settings_vbox.visible = false
+	_main_vbox.visible = true
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		if _is_paused:
+		if _showing_settings:
+			_hide_settings()
+		elif _is_paused:
 			_resume()
 		elif not get_tree().paused:
 			_pause()
@@ -66,28 +178,39 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		get_viewport().set_input_as_handled()
 
+
 func _pause() -> void:
 	_is_paused = true
 	_overlay.visible = true
 	_panel.visible = true
 	get_tree().paused = true
 
+
 func _resume() -> void:
 	_is_paused = false
+	_showing_settings = false
 	_overlay.visible = false
 	_panel.visible = false
+	_settings_vbox.visible = false
+	_main_vbox.visible = true
 	get_tree().paused = false
+
 
 func _on_resume_pressed() -> void:
 	_resume()
 
+
 func _on_exit_pressed() -> void:
 	_is_paused = false
+	_showing_settings = false
 	_overlay.visible = false
 	_panel.visible = false
 	GameManager.reset()
 	var upgrade_mgr: Node = get_node_or_null("/root/UpgradeManager")
 	if upgrade_mgr:
 		upgrade_mgr.reset()
+	var sfx: Node = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.stop_music()
 	get_tree().paused = false
 	get_tree().change_scene_to_file(MAIN_MENU_PATH)

@@ -5,8 +5,8 @@
 extends Node2D
 
 const SPEED: float = 300.0
-const SPLASH_RADIUS: float = 40.0
-const SPLASH_FACTOR: float = 0.5   # splash neighbours take 50 % of full damage
+const SPLASH_RADIUS: float = 45.0
+const SPLASH_FACTOR: float = 0.6   # splash neighbours take 60 % of full damage
 
 var _target: Node2D = null
 var _damage: float = 10.0
@@ -23,11 +23,13 @@ func _process(delta: float) -> void:
 	var direction = (_target.global_position - global_position).normalized()
 	global_position += direction * SPEED * delta
 	rotation = direction.angle()
+	z_index = 2000 + int(global_position.y)
 
 	if global_position.distance_to(_target.global_position) < 6.0:
 		_explode()
 
 func _explode() -> void:
+	PixelFX.spawn_cannon_hit(get_tree(), global_position)
 	# Primary target takes full damage.
 	if is_instance_valid(_target):
 		_target.take_damage(_damage)

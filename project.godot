@@ -14,18 +14,21 @@ config/name="TowerDefence"
 run/main_scene="res://Assets/Scene/main_menu.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 
+[audio]
+
+default_bus_layout="res://default_bus_layout.tres"
+
 [autoload]
 
 GameManager="*res://Assets/Scripts/GameManager.gd"
 UpgradeManager="*res://Assets/Scripts/UpgradeManager.gd"
+SFXManager="*res://Assets/Scripts/SFXManager.gd"
 
 [display]
 
 window/size/viewport_width=960
 window/size/viewport_height=540
-window/size/resizable=true
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
 
 [physics]
 

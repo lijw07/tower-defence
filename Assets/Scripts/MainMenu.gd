@@ -4,6 +4,10 @@ const GAME_SCENE_PATH = "res://Assets/Scene/scene.tscn"
 
 func _ready() -> void:
 	_build_ui()
+	# Start menu background music
+	var sfx: Node = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play_music("menu")
 
 func _build_ui() -> void:
 	# Full-screen dark background
@@ -31,12 +35,12 @@ func _build_ui() -> void:
 	vbox.add_child(UITheme.make_separator())
 
 	# ── Title ──
-	var title := UITheme.make_label("Tower Defence", 28, UITheme.GOLD)
+	var title := UITheme.make_label("Tower Defence", 20, UITheme.GOLD)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
 
 	# ── Subtitle ──
-	var subtitle := UITheme.make_label("Defend your castle at all costs", 12, UITheme.TEXT_DIM)
+	var subtitle := UITheme.make_label("Defend your castle at all costs", 8, UITheme.TEXT_DIM)
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(subtitle)
 
@@ -47,7 +51,7 @@ func _build_ui() -> void:
 
 	# ── Start button ──
 	var start_btn := UITheme.make_button("Start", Vector2(220, 42))
-	start_btn.add_theme_font_size_override("font_size", 16)
+	start_btn.add_theme_font_size_override("font_size", 12)
 	start_btn.pressed.connect(_on_start_pressed)
 	var btn_row := CenterContainer.new()
 	btn_row.add_child(start_btn)
@@ -62,4 +66,8 @@ func _build_ui() -> void:
 	vbox.add_child(UITheme.make_separator())
 
 func _on_start_pressed() -> void:
+	var sfx: Node = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play("button_click")
+		sfx.stop_music()
 	get_tree().change_scene_to_file(GAME_SCENE_PATH)

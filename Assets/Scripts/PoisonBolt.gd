@@ -4,7 +4,7 @@
 extends Node2D
 
 const SPEED: float = 300.0
-const POISON_DURATION: float = 4.0   # seconds the poison lasts
+const POISON_DURATION: float = 3.0   # seconds the poison lasts
 
 var _target: Node2D = null
 var _damage: float = 10.0   # used as DPS
@@ -21,15 +21,16 @@ func _process(delta: float) -> void:
 	var direction = (_target.global_position - global_position).normalized()
 	global_position += direction * SPEED * delta
 	rotation = direction.angle()
+	z_index = 2000 + int(global_position.y)
 
 	if global_position.distance_to(_target.global_position) < 4.0:
 		_hit()
 
 func _hit() -> void:
 	if is_instance_valid(_target):
+		PixelFX.spawn_poison_hit(get_tree(), _target.global_position)
 		if _target.has_method("apply_poison"):
 			_target.apply_poison(_damage, POISON_DURATION)
 		else:
-			# Fallback: deal damage directly if enemy lacks poison support.
 			_target.take_damage(_damage)
 	queue_free()

@@ -14,6 +14,7 @@ const SPEED_BASE_COST: int = 120
 const COST_SCALE: float = 1.5
 const DAMAGE_PER_LEVEL: float = 0.20   # +20% per level
 const SPEED_PER_LEVEL: float = 0.15    # +15% per level
+const MAX_UPGRADE_LEVEL: int = 50      # max level for damage / speed upgrades
 
 # ── Castle upgrades ──────────────────────────────────────────────────────────
 signal castle_stats_changed
@@ -23,10 +24,15 @@ const CASTLE_HEALTH_COST_SCALE: float = 1.5
 const CASTLE_ARMOR_BASE_COST: int = 75
 const CASTLE_ARMOR_COST_SCALE: float = 1.1
 const CASTLE_ARMOR_MAX: int = 10
+const CASTLE_HEAL_BASE_COST: int = 100
+const CASTLE_HEAL_COST_SCALE: float = 1.3
 
 var _castle_health_level: int = 0       # permanent +1 max HP per level
 var _castle_armor: int = 0              # current armor points (consumable)
 var _castle_armor_total_purchased: int = 0  # lifetime purchases for cost scaling
+var _castle_heal_total_purchased: int = 0  # lifetime heals for cost scaling
+var _castle_current_lives: int = 0   # updated by SceneRoot so shop can check
+var _castle_max_lives: int = 0       # updated by SceneRoot so shop can check
 
 # ── Ensure a tower entry exists ──────────────────────────────────────────────
 
@@ -49,6 +55,9 @@ func get_speed_upgrade_cost(tower_name: String) -> int:
 # ── Purchase ─────────────────────────────────────────────────────────────────
 
 func buy_damage_upgrade(tower_name: String) -> bool:
+	_ensure_tower(tower_name)
+	if _tower_upgrades[tower_name].damage_level >= MAX_UPGRADE_LEVEL:
+		return false
 	var cost := get_damage_upgrade_cost(tower_name)
 	if not GameManager.spend_gold(cost):
 		return false
@@ -57,6 +66,9 @@ func buy_damage_upgrade(tower_name: String) -> bool:
 	return true
 
 func buy_speed_upgrade(tower_name: String) -> bool:
+	_ensure_tower(tower_name)
+	if _tower_upgrades[tower_name].speed_level >= MAX_UPGRADE_LEVEL:
+		return false
 	var cost := get_speed_upgrade_cost(tower_name)
 	if not GameManager.spend_gold(cost):
 		return false
@@ -154,6 +166,29 @@ func consume_armor() -> bool:
 	emit_signal("castle_stats_changed")
 	return true
 
+# ── Castle heal ──────────────────────────────────────────────────────────────
+
+func update_castle_lives(current: int, maximum: int) -> void:
+	_castle_current_lives = current
+	_castle_max_lives = maximum
+
+func is_castle_full_health() -> bool:
+	return _castle_current_lives >= _castle_max_lives
+
+func get_castle_heal_cost() -> int:
+	return CASTLE_HEAL_BASE_COST
+
+func buy_castle_heal() -> bool:
+	if is_castle_full_health():
+		return false
+	var cost := get_castle_heal_cost()
+	if not GameManager.spend_gold(cost):
+		return false
+	_castle_heal_total_purchased += 1
+	emit_signal("castle_stats_changed")
+	emit_signal("upgrades_changed")
+	return true
+
 # ── Reset ────────────────────────────────────────────────────────────────────
 
 func reset() -> void:
@@ -162,5 +197,8 @@ func reset() -> void:
 	_castle_health_level = 0
 	_castle_armor = 0
 	_castle_armor_total_purchased = 0
+	_castle_heal_total_purchased = 0
+	_castle_current_lives = 0
+	_castle_max_lives = 0
 	emit_signal("upgrades_changed")
 	emit_signal("castle_stats_changed")
