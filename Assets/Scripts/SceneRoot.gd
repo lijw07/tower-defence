@@ -164,9 +164,9 @@ func _apply_shader(visual: CanvasItem, owner_node: Node2D) -> ShaderMaterial:
 	# Already has our shader?
 	if vid in _occluded_visuals:
 		if visual.material is ShaderMaterial:
-			var mat: ShaderMaterial = visual.material as ShaderMaterial
-			if mat.shader == _occlusion_shader:
-				return mat
+			var existing_mat: ShaderMaterial = visual.material as ShaderMaterial
+			if existing_mat.shader == _occlusion_shader:
+				return existing_mat
 	# Save original material and apply ours
 	var original_mat: Material = visual.material
 	var mat := ShaderMaterial.new()
@@ -327,7 +327,7 @@ func _show_boss_warning() -> void:
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_preset(Control.PRESET_FULL_RECT)
-	label.add_theme_font_size_override("font_size", 28)
+	label.add_theme_font_size_override("font_size", 40)
 	label.add_theme_color_override("font_color", Color(1.0, 0.15, 0.1))
 	label.add_theme_color_override("font_outline_color", Color(0.2, 0.0, 0.0))
 	label.add_theme_constant_override("outline_size", 4)
@@ -807,6 +807,13 @@ func _animate_mushroom_fling(deco: Node2D) -> void:
 			d.spin_speed *= 0.5
 			# Squash on impact
 			deco.scale = Vector2(1.3, 0.6)
+			# Bounce FX — sound + particles, intensity fades with each bounce
+			var bounce_intensity: float = 1.0 / float(d.bounce_count)
+			var bounce_pos: Vector2 = deco.global_position
+			var _sfx: Node = deco.get_node_or_null("/root/SFXManager")
+			if _sfx:
+				_sfx.play("mushroom_bounce", -6.0 * float(d.bounce_count - 1))
+			PixelFX.spawn_mushroom_bounce(deco.get_tree(), bounce_pos, bounce_intensity)
 		else:
 			# Gradually restore scale
 			deco.scale = deco.scale.lerp(Vector2(1.0, 1.0), dt * 8.0)

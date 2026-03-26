@@ -52,7 +52,7 @@ func _build_ui() -> void:
 	_main_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	root_vbox.add_child(_main_vbox)
 
-	var title := UITheme.make_title("Paused", 14)
+	var title := UITheme.make_title("Paused", 22)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_main_vbox.add_child(title)
 
@@ -81,7 +81,7 @@ func _build_ui() -> void:
 	_settings_vbox.visible = false
 	root_vbox.add_child(_settings_vbox)
 
-	var stitle := UITheme.make_title("Settings", 14)
+	var stitle := UITheme.make_title("Settings", 22)
 	stitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_settings_vbox.add_child(stitle)
 
@@ -90,7 +90,7 @@ func _build_ui() -> void:
 	# Music volume
 	var music_row := HBoxContainer.new()
 	music_row.add_theme_constant_override("separation", 8)
-	var music_lbl := UITheme.make_label("Music", 8, UITheme.TEXT)
+	var music_lbl := UITheme.make_label("Music", 14, UITheme.TEXT)
 	music_lbl.custom_minimum_size.x = 50
 	music_row.add_child(music_lbl)
 
@@ -101,7 +101,7 @@ func _build_ui() -> void:
 	_music_slider = UITheme.make_hslider(0.0, 1.0, music_init)
 	_music_slider.value_changed.connect(_on_music_volume_changed)
 	music_row.add_child(_music_slider)
-	_music_value_label = UITheme.make_label(_pct(music_init), 8, UITheme.TEXT_DIM)
+	_music_value_label = UITheme.make_label(_pct(music_init), 14, UITheme.TEXT_DIM)
 	_music_value_label.custom_minimum_size.x = 35
 	_music_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	music_row.add_child(_music_value_label)
@@ -110,7 +110,7 @@ func _build_ui() -> void:
 	# SFX volume
 	var sfx_row := HBoxContainer.new()
 	sfx_row.add_theme_constant_override("separation", 8)
-	var sfx_lbl := UITheme.make_label("SFX", 8, UITheme.TEXT)
+	var sfx_lbl := UITheme.make_label("SFX", 14, UITheme.TEXT)
 	sfx_lbl.custom_minimum_size.x = 50
 	sfx_row.add_child(sfx_lbl)
 
@@ -120,7 +120,7 @@ func _build_ui() -> void:
 	_sfx_slider = UITheme.make_hslider(0.0, 1.0, sfx_init)
 	_sfx_slider.value_changed.connect(_on_sfx_volume_changed)
 	sfx_row.add_child(_sfx_slider)
-	_sfx_value_label = UITheme.make_label(_pct(sfx_init), 8, UITheme.TEXT_DIM)
+	_sfx_value_label = UITheme.make_label(_pct(sfx_init), 14, UITheme.TEXT_DIM)
 	_sfx_value_label.custom_minimum_size.x = 35
 	_sfx_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	sfx_row.add_child(_sfx_value_label)
@@ -142,7 +142,7 @@ func _build_ui() -> void:
 	_howto_vbox.visible = false
 	root_vbox.add_child(_howto_vbox)
 
-	var htitle := UITheme.make_title("How to Play", 14)
+	var htitle := UITheme.make_title("How to Play", 22)
 	htitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_howto_vbox.add_child(htitle)
 
@@ -163,10 +163,10 @@ func _build_ui() -> void:
 		tip.fit_content = true
 		tip.scroll_active = false
 		tip.text = tip_text
-		tip.custom_minimum_size = Vector2(240, 0)
+		tip.custom_minimum_size = Vector2(360, 0)
 		tip.add_theme_color_override("default_color", UITheme.TEXT)
-		tip.add_theme_font_size_override("normal_font_size", 7)
-		tip.add_theme_font_size_override("bold_font_size", 7)
+		tip.add_theme_font_size_override("normal_font_size", 13)
+		tip.add_theme_font_size_override("bold_font_size", 13)
 		var pf: Font = UITheme.get_pixel_font()
 		if pf:
 			tip.add_theme_font_override("normal_font", pf)

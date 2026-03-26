@@ -76,7 +76,7 @@ static func style_button(btn: Button) -> void:
 	btn.add_theme_color_override("font_color", TEXT)
 	btn.add_theme_color_override("font_hover_color", GOLD)
 	btn.add_theme_color_override("font_pressed_color", TEXT_DIM)
-	btn.add_theme_font_size_override("font_size", 10)
+	btn.add_theme_font_size_override("font_size", 16)
 	var pf: Font = get_pixel_font()
 	if pf:
 		btn.add_theme_font_override("font", pf)
@@ -90,7 +90,7 @@ static func make_button(label_text: String, min_size := Vector2(160, 34)) -> But
 
 # ── Label helpers ────────────────────────────────────────────────────────────
 
-static func make_label(text: String, size: int = 10, color: Color = TEXT) -> Label:
+static func make_label(text: String, size: int = 16, color: Color = TEXT) -> Label:
 	var lbl := Label.new()
 	lbl.text = text
 	lbl.add_theme_font_size_override("font_size", size)
@@ -100,7 +100,7 @@ static func make_label(text: String, size: int = 10, color: Color = TEXT) -> Lab
 		lbl.add_theme_font_override("font", pf)
 	return lbl
 
-static func make_title(text: String, size: int = 16) -> Label:
+static func make_title(text: String, size: int = 24) -> Label:
 	var lbl := Label.new()
 	lbl.text = text
 	lbl.add_theme_font_size_override("font_size", size)

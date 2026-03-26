@@ -25,7 +25,7 @@ func _build_ui() -> void:
 
 	# Main panel
 	var panel := UITheme.make_panel(UITheme.BG)
-	panel.custom_minimum_size = Vector2(340, 0)
+	panel.custom_minimum_size = Vector2(480, 0)
 	center.add_child(panel)
 
 	var vbox := VBoxContainer.new()
@@ -37,12 +37,12 @@ func _build_ui() -> void:
 	vbox.add_child(UITheme.make_separator())
 
 	# ── Title ──
-	var title := UITheme.make_label("Tower Defence", 20, UITheme.GOLD)
+	var title := UITheme.make_label("Tower Defence", 32, UITheme.GOLD)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
 
 	# ── Subtitle ──
-	var subtitle := UITheme.make_label("Defend your castle at all costs", 8, UITheme.TEXT_DIM)
+	var subtitle := UITheme.make_label("Defend your castle at all costs", 14, UITheme.TEXT_DIM)
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(subtitle)
 
@@ -53,7 +53,7 @@ func _build_ui() -> void:
 
 	# ── Start button ──
 	var start_btn := UITheme.make_button("Start", Vector2(220, 42))
-	start_btn.add_theme_font_size_override("font_size", 12)
+	start_btn.add_theme_font_size_override("font_size", 18)
 	start_btn.pressed.connect(_on_start_pressed)
 	var btn_row := CenterContainer.new()
 	btn_row.add_child(start_btn)
@@ -87,15 +87,15 @@ func _build_ui() -> void:
 	_howto_overlay.add_child(howto_center)
 
 	var howto_panel := UITheme.make_panel(UITheme.BG)
-	howto_panel.custom_minimum_size = Vector2(340, 0)
+	howto_panel.custom_minimum_size = Vector2(480, 0)
 	howto_center.add_child(howto_panel)
 
 	var hvbox := VBoxContainer.new()
-	hvbox.add_theme_constant_override("separation", 6)
+	hvbox.add_theme_constant_override("separation", 8)
 	hvbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	howto_panel.add_child(hvbox)
 
-	var htitle := UITheme.make_title("How to Play", 16)
+	var htitle := UITheme.make_title("How to Play", 24)
 	htitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hvbox.add_child(htitle)
 
@@ -116,9 +116,10 @@ func _build_ui() -> void:
 		tip.fit_content = true
 		tip.scroll_active = false
 		tip.text = tip_text
+		tip.custom_minimum_size = Vector2(420, 0)
 		tip.add_theme_color_override("default_color", UITheme.TEXT)
-		tip.add_theme_font_size_override("normal_font_size", 7)
-		tip.add_theme_font_size_override("bold_font_size", 7)
+		tip.add_theme_font_size_override("normal_font_size", 13)
+		tip.add_theme_font_size_override("bold_font_size", 13)
 		var pf: Font = UITheme.get_pixel_font()
 		if pf:
 			tip.add_theme_font_override("normal_font", pf)

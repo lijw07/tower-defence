@@ -60,14 +60,14 @@ func _build_ui() -> void:
 
 	var armor_icon := Label.new()
 	armor_icon.text = "AR"
-	armor_icon.add_theme_font_size_override("font_size", 8)
+	armor_icon.add_theme_font_size_override("font_size", 14)
 	if _pf:
 		armor_icon.add_theme_font_override("font", _pf)
 	armor_icon.add_theme_color_override("font_color", Color(0.45, 0.65, 0.90))
 	_armor_row.add_child(armor_icon)
 
 	_armor_label = Label.new()
-	_armor_label.add_theme_font_size_override("font_size", 8)
+	_armor_label.add_theme_font_size_override("font_size", 14)
 	if _pf:
 		_armor_label.add_theme_font_override("font", _pf)
 	_armor_label.add_theme_color_override("font_color", UITheme.TEXT)
@@ -101,14 +101,14 @@ func _build_ui() -> void:
 
 	var heart_label := Label.new()
 	heart_label.text = "HP"
-	heart_label.add_theme_font_size_override("font_size", 8)
+	heart_label.add_theme_font_size_override("font_size", 14)
 	if _pf:
 		heart_label.add_theme_font_override("font", _pf)
 	heart_label.add_theme_color_override("font_color", UITheme.TEXT_RED)
 	hbox.add_child(heart_label)
 
 	_label = Label.new()
-	_label.add_theme_font_size_override("font_size", 8)
+	_label.add_theme_font_size_override("font_size", 14)
 	if _pf:
 		_label.add_theme_font_override("font", _pf)
 	_label.add_theme_color_override("font_color", UITheme.TEXT)

@@ -11,14 +11,14 @@ const COUNTDOWN_DURATION: int = 10
 const SLIDE_THRESHOLD: int = 5
 
 # Panel rest offsets (anchored top-right)
-const REST_LEFT: float = -200.0
+const REST_LEFT: float = -290.0
 const REST_RIGHT: float = -8.0
 const REST_TOP: float = 8.0
-const REST_BOTTOM: float = 62.0
+const REST_BOTTOM: float = 90.0
 
 # Off-screen offsets (slid fully to the right)
 const OFF_LEFT: float = 8.0
-const OFF_RIGHT: float = 200.0
+const OFF_RIGHT: float = 290.0
 
 var _seconds_left: int = 0
 var _countdown_timer: Timer
@@ -58,11 +58,11 @@ func _build_ui() -> void:
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	_panel.add_child(vbox)
 
-	_wave_label = UITheme.make_title("", 11)
+	_wave_label = UITheme.make_title("", 18)
 	_wave_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_wave_label)
 
-	_countdown_label = UITheme.make_label("", 9, UITheme.TEXT)
+	_countdown_label = UITheme.make_label("", 14, UITheme.TEXT)
 	_countdown_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_countdown_label)
 

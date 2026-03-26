@@ -43,7 +43,7 @@ func _build_ui() -> void:
 	_panel.add_child(vbox)
 
 	# Title
-	var title := UITheme.make_title("Game Over", 24)
+	var title := UITheme.make_title("Game Over", 36)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", UITheme.TEXT_RED)
 	vbox.add_child(title)
@@ -76,11 +76,11 @@ func _stat_row(parent: VBoxContainer, label_text: String) -> Label:
 	var row := HBoxContainer.new()
 	parent.add_child(row)
 
-	var name_lbl := UITheme.make_label(label_text, 12, UITheme.TEXT_DIM)
+	var name_lbl := UITheme.make_label(label_text, 18, UITheme.TEXT_DIM)
 	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(name_lbl)
 
-	var val_lbl := UITheme.make_label("—", 12, UITheme.TEXT)
+	var val_lbl := UITheme.make_label("—", 18, UITheme.TEXT)
 	val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	val_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(val_lbl)

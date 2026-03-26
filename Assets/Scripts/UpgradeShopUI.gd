@@ -8,8 +8,7 @@ var _tower_cards: Array[Dictionary] = []
 var _upgrade_mgr: Node
 var _tower_data_list: Array = []
 var _scroll: ScrollContainer
-var _dragging_scroll: bool = false
-var _drag_prev_y: float = 0.0       # previous frame's mouse Y for incremental drag
+var _scroll_tween: Tween = null     # active smooth-scroll tween
 
 # Castle upgrade UI references
 var _castle_hp_level_lbl: Label
@@ -24,10 +23,10 @@ var _castle_heal_btn: Button
 const CARD_WIDTH: float = 140.0
 const CARD_INNER: float = 120.0
 const BTN_SIZE := Vector2(110, 24)
-const SMALL_BTN := Vector2(52, 22)
-const FONT_TITLE: int = 11
-const FONT_SMALL: int = 9
-const FONT_BTN: int = 9
+const SMALL_BTN := Vector2(58, 26)
+const FONT_TITLE: int = 16
+const FONT_SMALL: int = 14
+const FONT_BTN: int = 14
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -289,7 +288,7 @@ func _build_tower_card(data: TowerData) -> void:
 
 	# State wrapper — expand to fill remaining space so buttons align across cards
 	var state_wrapper := Control.new()
-	state_wrapper.custom_minimum_size.y = 50
+	state_wrapper.custom_minimum_size.y = 90
 	state_wrapper.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	card_vbox.add_child(state_wrapper)
 
@@ -488,6 +487,7 @@ func toggle_shop() -> void:
 	if _overlay.visible:
 		if sfx:
 			sfx.play("shop_open")
+		_scroll.scroll_vertical = 0
 		_refresh_all()
 	else:
 		if sfx:
@@ -526,24 +526,24 @@ func _on_gold_changed(_amount: int) -> void:
 	if _overlay.visible:
 		_refresh_all()
 
+func _smooth_scroll_to(target: int) -> void:
+	target = maxi(target, 0)
+	if _scroll_tween and _scroll_tween.is_valid():
+		_scroll_tween.kill()
+	_scroll_tween = create_tween()
+	_scroll_tween.tween_property(_scroll, "scroll_vertical", target, 0.15).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+
 func _on_scroll_input(event: InputEvent) -> void:
-	# Block scroll wheel entirely — only allow click-drag scrolling
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		var step: int = 40
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			_smooth_scroll_to(_scroll.scroll_vertical - step)
 			_scroll.get_viewport().set_input_as_handled()
 			return
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				_dragging_scroll = true
-				_drag_prev_y = event.global_position.y
-			else:
-				_dragging_scroll = false
-	if event is InputEventMouseMotion and _dragging_scroll:
-		# Incremental drag: move scroll by a fraction of the mouse delta each frame
-		var delta_y: float = _drag_prev_y - event.global_position.y
-		_drag_prev_y = event.global_position.y
-		_scroll.scroll_vertical = maxi(_scroll.scroll_vertical + int(delta_y * 0.12), 0)
-		_scroll.get_viewport().set_input_as_handled()
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+			_smooth_scroll_to(_scroll.scroll_vertical + step)
+			_scroll.get_viewport().set_input_as_handled()
+			return
 
 func _on_overlay_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

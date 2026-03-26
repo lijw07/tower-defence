@@ -74,7 +74,7 @@ func _build_shop_bar() -> void:
 	hbox.add_child(wave_col)
 
 	_wave_label = Label.new()
-	_wave_label.add_theme_font_size_override("font_size", 10)
+	_wave_label.add_theme_font_size_override("font_size", 16)
 	_wave_label.add_theme_color_override("font_color", UITheme.TEXT)
 	var _wf: Font = UITheme.get_pixel_font()
 	if _wf:
@@ -84,7 +84,7 @@ func _build_shop_bar() -> void:
 	wave_col.add_child(_wave_label)
 
 	_enemies_label = Label.new()
-	_enemies_label.add_theme_font_size_override("font_size", 8)
+	_enemies_label.add_theme_font_size_override("font_size", 14)
 	_enemies_label.add_theme_color_override("font_color", UITheme.TEXT_DIM)
 	if _wf:
 		_enemies_label.add_theme_font_override("font", _wf)
@@ -120,7 +120,7 @@ func _build_shop_bar() -> void:
 	hbox.add_child(right_col)
 
 	_gold_label = Label.new()
-	_gold_label.add_theme_font_size_override("font_size", 10)
+	_gold_label.add_theme_font_size_override("font_size", 16)
 	_gold_label.add_theme_color_override("font_color", UITheme.GOLD)
 	var _pf: Font = UITheme.get_pixel_font()
 	if _pf:
@@ -134,7 +134,7 @@ func _build_shop_bar() -> void:
 	_upgrade_btn.custom_minimum_size = Vector2(72, 30)
 	_upgrade_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	UITheme.style_button(_upgrade_btn)
-	_upgrade_btn.add_theme_font_size_override("font_size", 8)
+	_upgrade_btn.add_theme_font_size_override("font_size", 14)
 	_upgrade_btn.pressed.connect(_on_upgrade_pressed)
 	right_col.add_child(_upgrade_btn)
 
@@ -156,33 +156,33 @@ func _build_tooltip() -> void:
 	vbox.add_theme_constant_override("separation", 6)
 	_tooltip_panel.add_child(vbox)
 
-	_tooltip_name = UITheme.make_label("", 12, UITheme.GOLD)
+	_tooltip_name = UITheme.make_label("", 18, UITheme.GOLD)
 	vbox.add_child(_tooltip_name)
 
 	vbox.add_child(UITheme.make_separator())
 
-	_tooltip_cost = UITheme.make_label("", 9, UITheme.TEXT_ORANGE)
+	_tooltip_cost = UITheme.make_label("", 14, UITheme.TEXT_ORANGE)
 	vbox.add_child(_tooltip_cost)
 
-	_tooltip_dmg = UITheme.make_label("", 9, UITheme.TEXT)
+	_tooltip_dmg = UITheme.make_label("", 14, UITheme.TEXT)
 	vbox.add_child(_tooltip_dmg)
 
-	_tooltip_spd = UITheme.make_label("", 9, UITheme.TEXT)
+	_tooltip_spd = UITheme.make_label("", 14, UITheme.TEXT)
 	vbox.add_child(_tooltip_spd)
 
-	_tooltip_range = UITheme.make_label("", 9, UITheme.TEXT)
+	_tooltip_range = UITheme.make_label("", 14, UITheme.TEXT)
 	vbox.add_child(_tooltip_range)
 
 	vbox.add_child(UITheme.make_separator())
 
-	_tooltip_desc = UITheme.make_label("", 8, UITheme.TEXT_DIM)
+	_tooltip_desc = UITheme.make_label("", 13, UITheme.TEXT_DIM)
 	_tooltip_desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_tooltip_desc.custom_minimum_size.x = 210
+	_tooltip_desc.custom_minimum_size.x = 260
 	vbox.add_child(_tooltip_desc)
 
 	vbox.add_child(UITheme.make_separator())
 
-	_tooltip_sell = UITheme.make_label("", 8, UITheme.TEXT_GREEN)
+	_tooltip_sell = UITheme.make_label("", 13, UITheme.TEXT_GREEN)
 	vbox.add_child(_tooltip_sell)
 
 	add_child(_tooltip_panel)
@@ -200,7 +200,7 @@ func _create_tower_button(data: TowerData) -> void:
 	btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 	btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	UITheme.style_button(btn)
-	btn.add_theme_font_size_override("font_size", 7)
+	btn.add_theme_font_size_override("font_size", 12)
 	btn.add_theme_constant_override("icon_max_width", 40)
 	btn.pressed.connect(_on_tower_button_pressed.bind(data))
 	btn.mouse_entered.connect(_on_button_hover.bind(btn, data))

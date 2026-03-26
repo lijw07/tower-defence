@@ -10,13 +10,13 @@ var _selected: Node2D = null
 var _panel: PanelContainer
 var _name_label: Label
 var _desc_label: Label
-var _cost_label: Label
 var _remove_btn: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 6  # Above TowerShopUI (layer 5) so panel draws on top of toolbar
 	_build_ui()
+	GameManager.gold_changed.connect(_on_gold_changed)
 
 func _build_ui() -> void:
 	_panel = UITheme.make_panel(UITheme.BG_LIGHTER)
@@ -27,20 +27,17 @@ func _build_ui() -> void:
 	vbox.add_theme_constant_override("separation", 5)
 	_panel.add_child(vbox)
 
-	_name_label = UITheme.make_label("", 12, UITheme.GOLD)
+	_name_label = UITheme.make_label("", 18, UITheme.GOLD)
 	vbox.add_child(_name_label)
 
-	_desc_label = UITheme.make_label("", 9, UITheme.TEXT_DIM)
+	_desc_label = UITheme.make_label("", 14, UITheme.TEXT_DIM)
 	_desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_desc_label.custom_minimum_size.x = 170
+	_desc_label.custom_minimum_size.x = 220
 	vbox.add_child(_desc_label)
 
 	vbox.add_child(UITheme.make_separator())
 
-	_cost_label = UITheme.make_label("", 10, UITheme.TEXT)
-	vbox.add_child(_cost_label)
-
-	_remove_btn = UITheme.make_button("Remove", Vector2(170, 30))
+	_remove_btn = UITheme.make_button("Remove", Vector2(190, 30))
 	_remove_btn.pressed.connect(_on_remove_pressed)
 	vbox.add_child(_remove_btn)
 
@@ -55,13 +52,7 @@ func select_decoration(deco: Node2D) -> void:
 	_name_label.text = deco_name
 	_desc_label.text = _get_description(deco_type)
 	var can_afford: bool = GameManager.gold >= cost
-	if can_afford:
-		_cost_label.text = "Cost: %d gold" % cost
-		_cost_label.add_theme_color_override("font_color", UITheme.TEXT_ORANGE)
-	else:
-		_cost_label.text = "Need %d gold (have %d)" % [cost, GameManager.gold]
-		_cost_label.add_theme_color_override("font_color", UITheme.TEXT_RED)
-	_remove_btn.text = "Remove"
+	_remove_btn.text = "Remove (%d gold)" % cost if can_afford else "Need %d gold" % cost
 	_remove_btn.disabled = not can_afford
 
 	_panel.visible = true
@@ -104,6 +95,18 @@ func _position_panel(world_pos: Vector2) -> void:
 func deselect() -> void:
 	_selected = null
 	_panel.visible = false
+
+func _on_gold_changed(_new_amount: int) -> void:
+	if _panel.visible and _selected != null and is_instance_valid(_selected):
+		_refresh_affordability()
+
+func _refresh_affordability() -> void:
+	if _selected == null or not is_instance_valid(_selected):
+		return
+	var cost: int = _selected.get_meta("removal_cost", 0)
+	var can_afford: bool = GameManager.gold >= cost
+	_remove_btn.text = "Remove (%d gold)" % cost if can_afford else "Need %d gold" % cost
+	_remove_btn.disabled = not can_afford
 
 func _on_remove_pressed() -> void:
 	if _selected == null or not is_instance_valid(_selected):

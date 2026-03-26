@@ -44,6 +44,12 @@ func _on_enemy_entered(area: Area2D) -> void:
 func _on_enemy_exited(area: Area2D) -> void:
 	_enemies_in_range.erase(area)
 
+func _process(_delta: float) -> void:
+	# Retry attacking when ready — handles enemies that entered off-camera
+	# and have since moved into view, or the initial deferred attack missed.
+	if _can_attack and _enemies_in_range.size() > 0:
+		_try_attack()
+
 func _on_cooldown_finished() -> void:
 	_can_attack = true
 	_try_attack()

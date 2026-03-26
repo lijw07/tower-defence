@@ -194,6 +194,29 @@ static func spawn_mushroom_pick(tree: SceneTree, pos: Vector2) -> void:
 		fx._add(Vector2.ZERO, Vector2(cos(angle), sin(angle)) * spd,
 			randf_range(0.15, 0.3), c, randf_range(1.5, 2.0), 60.0)
 
+# ── Mushroom bounce — small dust puff + spore burst on landing ──────────────
+
+static func spawn_mushroom_bounce(tree: SceneTree, pos: Vector2, intensity: float = 1.0) -> void:
+	var fx := _make(tree, pos)
+	# Ground dust puff — spreads outward low
+	var dust_count: int = maxi(int(4 * intensity), 2)
+	for i in range(dust_count):
+		var angle: float = randf_range(-PI * 0.85, -PI * 0.15)  # mostly upward-ish
+		var spd: float = randf_range(10.0, 25.0) * intensity
+		var c: Color = [Color(0.7, 0.6, 0.45), Color(0.65, 0.55, 0.4), Color(0.6, 0.5, 0.35)][i % 3]
+		fx._add(Vector2(randf_range(-3, 3), 0),
+			Vector2(cos(angle), sin(angle)) * spd,
+			randf_range(0.2, 0.4), c, randf_range(1.0, 2.0), 20.0)
+	# Tiny spore pops
+	var spore_count: int = maxi(int(3 * intensity), 1)
+	for i in range(spore_count):
+		var angle: float = randf_range(-PI, 0)  # upper half
+		var spd: float = randf_range(12.0, 30.0) * intensity
+		var c: Color = [Color(0.95, 0.85, 0.55), Color(0.9, 0.8, 0.5), Color(1.0, 0.9, 0.6)][i % 3]
+		fx._add(Vector2(randf_range(-2, 2), randf_range(-1, 1)),
+			Vector2(cos(angle), sin(angle)) * spd,
+			randf_range(0.15, 0.35), c, randf_range(1.0, 1.5), -8.0)
+
 # ── Nature grow — green sparkles rising from the ground ─────────────────────
 
 static func spawn_nature_grow(tree: SceneTree, pos: Vector2) -> void:

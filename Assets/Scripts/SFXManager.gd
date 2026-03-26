@@ -47,6 +47,7 @@ func _ready() -> void:
 	_sounds["tree_chop"] = _gen_tree_chop()
 	_sounds["rock_break"] = _gen_rock_break()
 	_sounds["mushroom_pick"] = _gen_mushroom_pick()
+	_sounds["mushroom_bounce"] = _gen_mushroom_bounce()
 	_sounds["nature_grow"] = _gen_nature_grow()
 	_sounds["tower_destroy"] = _gen_tower_destroy()
 	_sounds["boss_warning"] = _gen_boss_warning()
@@ -551,6 +552,30 @@ func _gen_mushroom_pick() -> AudioStreamWAV:
 			var spark_e: float = _env(t, 0.002, 0.015, 0.3, 0.02, 0.06)
 			s += _triangle(t, 1200.0 + 300.0 * sin(t * 40.0)) * spark_e * 0.2
 		samples[i] = s * 0.7
+	return _make_stream(samples)
+
+
+func _gen_mushroom_bounce() -> AudioStreamWAV:
+	# Soft rubbery thud with a springy wobble — mushroom hitting the ground
+	var dur: float = 0.22
+	var samples := PackedFloat32Array()
+	samples.resize(int(RATE * dur))
+	for i in range(samples.size()):
+		var t: float = float(i) / float(RATE)
+		var s: float = 0.0
+		# Low thud — short bass hit
+		var thud_freq: float = 120.0 + 60.0 * exp(-t * 30.0)
+		var thud_e: float = _env(t, 0.001, 0.015, 0.2, 0.02, 0.08)
+		s += _triangle(t, thud_freq) * thud_e * 0.6
+		# Rubbery wobble — pitch bends upward like a springy bounce
+		var wobble_freq: float = 300.0 + 200.0 * sin(t * 55.0) * exp(-t * 12.0)
+		var wobble_e: float = _env(t, 0.005, 0.03, 0.35, 0.04, 0.14)
+		s += _triangle(t, wobble_freq) * wobble_e * 0.35
+		# Tiny squelch noise on impact
+		if t < 0.04:
+			var squelch_e: float = _env(t, 0.001, 0.008, 0.5, 0.005, 0.025)
+			s += _noise() * squelch_e * 0.15
+		samples[i] = s * 0.6
 	return _make_stream(samples)
 
 

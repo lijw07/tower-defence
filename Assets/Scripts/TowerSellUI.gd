@@ -29,20 +29,20 @@ func _build_ui() -> void:
 	vbox.add_theme_constant_override("separation", 8)
 	_panel.add_child(vbox)
 
-	_name_label = UITheme.make_label("", 14, UITheme.GOLD)
+	_name_label = UITheme.make_label("", 20, UITheme.GOLD)
 	vbox.add_child(_name_label)
 
 	vbox.add_child(UITheme.make_separator())
 
-	_dmg_label = UITheme.make_label("", 10, UITheme.TEXT)
+	_dmg_label = UITheme.make_label("", 16, UITheme.TEXT)
 	vbox.add_child(_dmg_label)
 
-	_spd_label = UITheme.make_label("", 10, UITheme.TEXT)
+	_spd_label = UITheme.make_label("", 16, UITheme.TEXT)
 	vbox.add_child(_spd_label)
 
 	vbox.add_child(UITheme.make_separator())
 
-	_desc_label = UITheme.make_label("", 9, UITheme.TEXT_DIM)
+	_desc_label = UITheme.make_label("", 14, UITheme.TEXT_DIM)
 	_desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_desc_label.custom_minimum_size.x = 190
 	vbox.add_child(_desc_label)
